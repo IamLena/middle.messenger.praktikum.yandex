@@ -1,0 +1,7 @@
+[build]
+    base = "/"
+    publish = "dist"
+    command = "npm run build"
+
+[build.environment]
+  NPM_CONFIG_USERCONFIG = "./.npmrc"
