@@ -19,4 +19,6 @@ const chatsPageData = {
 
 const template = Handlebars.compile(pageTemplate);
 const appElement = document.querySelector('#app');
-appElement.innerHTML = template(chatsPageData);
+if (appElement) {
+    appElement.innerHTML = template(chatsPageData);
+}

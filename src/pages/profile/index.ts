@@ -68,4 +68,6 @@ const registerPageData = {
 
 const template = Handlebars.compile(pageTemplate);
 const appElement = document.querySelector('#app');
-appElement.innerHTML = template(registerPageData);
+if (appElement) {
+    appElement.innerHTML = template(registerPageData);
+}

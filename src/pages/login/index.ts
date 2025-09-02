@@ -38,4 +38,6 @@ const loginPageData = {
 
 const template = Handlebars.compile(pageTemplate);
 const appElement = document.querySelector('#app');
-appElement.innerHTML = template(loginPageData);
+if (appElement) {
+    appElement.innerHTML = template(loginPageData);
+}
