@@ -10,6 +10,6 @@ export default `
             value=this.value
         }}
     {{/each}}
-    {{> button }}
+    {{> button type="submit" }}
 </form>
 `;

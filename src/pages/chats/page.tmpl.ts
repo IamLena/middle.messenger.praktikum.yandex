@@ -2,9 +2,11 @@
 
 export default `
 <div class="{{className}}">
-    {{#with inputData}}
-        {{> input}}
-    {{/with}}
-    {{text}}
+    <form>
+        {{#with inputData}}
+            {{> input}}
+        {{/with}}
+        {{text}}
+    </form>
 </div>
 `;

@@ -21,7 +21,7 @@ const registerPageData = {
             label: 'first name',
             type: 'text',
             name: 'first_name',
-        }, {
+        },{
             id: 'second_name',
             label: 'second name',
             type: 'text',

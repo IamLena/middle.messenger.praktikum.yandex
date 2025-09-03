@@ -11,7 +11,7 @@ Handlebars.registerPartial('link', linkPartial);
 Handlebars.registerPartial('input', inputPartial);
 Handlebars.registerPartial('form', formPartial);
 
-const registerPageData = {
+const profilePageData = {
     className: commonCss.main,
     containerClassName: commonCss.container,
     formData: {
@@ -27,12 +27,18 @@ const registerPageData = {
             type: 'text',
             name: 'first_name',
             value: 'my first name',
-        }, {
+        },{
             id: 'second_name',
             label: 'second name',
             type: 'text',
             name: 'second_name',
             value: 'my second name',
+        },{
+            id: 'display_name',
+            label: 'display name',
+            type: 'text',
+            name: 'display_name',
+            value: 'my display name',
         },{
             id: 'email',
             label: 'email',
@@ -69,5 +75,5 @@ const registerPageData = {
 const template = Handlebars.compile(pageTemplate);
 const appElement = document.querySelector('#app');
 if (appElement) {
-    appElement.innerHTML = template(registerPageData);
+    appElement.innerHTML = template(profilePageData);
 }
