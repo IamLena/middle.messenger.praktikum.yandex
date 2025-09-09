@@ -1,4 +1,6 @@
+import Handlebars from "handlebars";
 import { Block } from "../framework/Block";
+import buttonTemplate from "./button.tmpl";
 
 export class Button extends Block {
   constructor(props) {
@@ -7,8 +9,10 @@ export class Button extends Block {
   }
 
   render() {
-		// В проекте должен быть ваш собственный шаблонизатор
-    return `<div>${this.props.text}</div>`;
+    const template = Handlebars.compile(buttonTemplate);
+    const content = template(this.props);
+
+    return content;
   }
 }
 

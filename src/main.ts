@@ -38,8 +38,8 @@ class Page {
         }
 
         if (page && this.rootElement) {
-            this.rootElement.appendChild(page.getContent());
             page.dispatchComponentDidMount();
+            this.rootElement.appendChild(page.getContent());
         }
     }
 };
