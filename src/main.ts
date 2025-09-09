@@ -3,6 +3,8 @@ import {
     // RegisterPage,
 } from './pages';
 
+import { Button } from './components/button';
+
 console.log('main.ts');
 
 const pageIds = [
@@ -24,17 +26,20 @@ class Page {
 
         switch (name) {
             case 'login':
-                page = LoginPage;
+                page = new Button({
+                    text: 'helllo world!'
+                })
+                // page = LoginPage;
                 // page = new LoginPage();
                 break;
             case 'register':
-                page = new RegisterPage();
+                // page = new RegisterPage();
                 break;
         }
 
         if (page && this.rootElement) {
-            this.rootElement.innerHTML = page;
-            // this.rootElement.replaceWith(page.getContent());
+            this.rootElement.appendChild(page.getContent());
+            page.dispatchComponentDidMount();
         }
     }
 };
