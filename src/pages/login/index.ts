@@ -41,3 +41,5 @@ const appElement = document.querySelector('#app');
 if (appElement) {
     appElement.innerHTML = template(loginPageData);
 }
+
+export default template(loginPageData);

@@ -4,19 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Messenger</title>
+    <script src="currentPage.ts"></script>
 </head>
 <body>
-    <main>
+    <!-- header is TBD in 3 sprint: -->
+    <!-- неправильная часть вне задания, для работы SPA до реализации корректного роутинга -->
+    <header id="header">
         <nav>
-            <ul>
-                <li><a href="/pages/login/index.html">login</a></li>
-                <li><a href="/pages/register/index.html">register</a></li>
-                <li><a href="/pages/profile/index.html">profile</a></li>
-                <li><a href="/pages/chats/index.html">chats</a></li>
-                <li><a href="/pages/notFound/index.html">notFound</a></li>
-                <li><a href="/pages/fatal/index.html">fatal</a></li>
-            </ul>
+            <button id="login" >login</button>
+            <button id="register">register</button>
+            <button id="profile">profile</button>
+            <button id="chats">chats</button>
+            <button id="notFound">404</button>
+            <button id="fatal">5**</button>
         </nav>
-    </main>
+    </header>
+    <main id="main"></main>
+    <footer id="footer">
+        <a href="https://github.com/IamLena/middle.messenger.praktikum.yandex">git hub</a>
+    </footer>
+    <script type="module" src="main.ts"></script>
 </body>
 </html>
