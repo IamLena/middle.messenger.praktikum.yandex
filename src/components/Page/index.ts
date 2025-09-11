@@ -1,6 +1,7 @@
 import { Block } from "../../framework/Block";
-// import css from "./index.module.css";
-import { Nav, Button } from "..";
+import css from "./index.module.css";
+import { Nav } from "..";
+import { LoginPage, RegisterPage } from "../../newPages";
 
 export type PageProps = {
   class?: string;
@@ -15,6 +16,7 @@ export class Page extends Block {
         onClick: (pageId) => this.changeCurrentPage(pageId),
       }),
       pageContent: '',
+      class: css.pageContent,
       ...props,
     });
   }
@@ -24,20 +26,10 @@ export class Page extends Block {
 
     switch (pageId) {
       case 'login':
-        // no proxy on children so it doesnt trigger rerender - this.pageContent = ...
-        // do it явно
-        newContent = new Button({
-          text: 'hehe',
-          onClick: () => {},
-        });
+        newContent = new LoginPage({});
         break;
       case 'register':
-        // no proxy on children so it doesnt trigger rerender - this.pageContent = ...
-        // do it явно
-        newContent = new Button({
-          text: 'olololo',
-          onClick: () => {},
-        });
+        newContent = new RegisterPage({});
         break;
       }
 

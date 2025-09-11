@@ -14,7 +14,7 @@ export class Button extends Block {
       events: {
         'click': onClick,
       },
-      class: css.button,
+      class: `${css.button} ${props.class}`,
       ...props,
     });
   }

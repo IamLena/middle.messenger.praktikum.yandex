@@ -1,3 +1,21 @@
-.button {
-    background-color: brown;
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    & h1 {
+        display: inline-block;
+        margin: 10px auto;
+    }
+
+    & label {
+        display: inline-block;
+        width: 90px;
+    }
+
+    & input {
+        display: inline-block;
+        width: 200px;
+        padding: 0
+    }
 }

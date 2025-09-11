@@ -1,6 +1,7 @@
 import { Block } from "../../framework/Block";
 import { Button, type ButtonProps } from '../Button';
 import { Input, type InputProps } from '../Input';
+import css from './index.module.css'
 
 
 export type FormProps = {
@@ -27,7 +28,12 @@ export class Form extends Block {
         inputProps => new Input(inputProps)
     );
 
-    super({button, inputs, ...props});
+    super({
+      button,
+      inputs,
+      class: css.form,
+      ...props,
+    });
   }
 
   getValues() {
