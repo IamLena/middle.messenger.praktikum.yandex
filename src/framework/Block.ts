@@ -53,6 +53,7 @@ export class Block {
     this.children = children; // should _makePropsProxy to rerender when child changed?
     this.lists = this._makePropsProxy({ ...lists });
     console.log('init', this);
+    this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
   }
 
   private _parseProps(props: BlockProps = {}) {
@@ -125,7 +126,7 @@ export class Block {
   };
 
   _render() {
-    console.log('Render');
+    console.log('Render', this);
     const propsAndStubs = { ...this.primitiveProps };
     const tmpId =  makeUUID();
     Object.entries(this.children).forEach(([key, child]) => {

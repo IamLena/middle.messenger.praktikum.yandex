@@ -4,13 +4,19 @@ import { type EventsToPass } from '../framework/EventBus';
 type ButtonProps = {
   text: string,
   type: string,
-  events?: EventsToPass,
+  onClick: () => void, // условно функция
+  // events?: EventsToPass,
   class?: string,
 };
 
 export class Button extends Block {
-  constructor(props: ButtonProps) {
-    super(props);
+  constructor({onClick, ...props}: ButtonProps) {
+    super({
+      events: {
+        'click': onClick,
+      },
+      ...props
+    });
   }
 
   override render() {

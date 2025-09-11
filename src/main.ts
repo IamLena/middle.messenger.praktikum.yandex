@@ -6,6 +6,7 @@ import {
 import { Button } from './components/button';
 import { Link } from './components/link';
 import { Input } from './components/input';
+import { Form } from './components/form';
 
 console.log('main.ts');
 
@@ -30,9 +31,7 @@ class Page {
             case 'login':
                 page = new Button({
                     text: 'helllo world!',
-                    events: {
-                        'click': () => {console.log('button click')}
-                    },
+                    onClick: () => {console.log('button click')},
                     class: 'my-button-class',
                     type: 'submit',
                 })
@@ -56,6 +55,33 @@ class Page {
                     name: 'my-input',
                     class: 'my-input-class',
                 })
+                break;
+            case 'chats':
+                page = new Form({
+                    header: 'this is my form',
+                    class: 'my-formclass',
+                    btnProps: {
+                        text: 'btn in form',
+                        // type: 'sumbit',
+                        class: 'my-form-button-class',
+                        // onClick: (event) => {
+                        //     event.preventDefault();
+                        //     event.stopPropagation();
+                        //     console.log('click in form');
+                        // },
+                    },
+                    inputData: [{
+                        id: 'login',
+                        label: 'login:',
+                        type: 'text',
+                        name: 'login',
+                    }, {
+                        id: 'password',
+                        label: 'password:',
+                        type: 'password',
+                        name: 'password',
+                    }],
+                });
                 break;
         }
 
