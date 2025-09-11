@@ -1,37 +1,59 @@
 import { Block } from "../../framework/Block";
-import css from "./index.module.css";
+// import css from "./index.module.css";
 import { Nav, Button } from "..";
 
 export type PageProps = {
   class?: string;
 };
 
-const pageIds = ["login", "register", "profile", "chats", "notFound", "fatal"];
-
 export class Page extends Block {
-  currentPage: string = "login";
+  // currentPage: string = "login";
 
   constructor(props: PageProps) {
     super({
-      class: css.container,
       nav: new Nav({
-        onClick: (pageId) => this.addProps({currentPage: pageId}),
+        onClick: (pageId) => this.changeCurrentPage(pageId),
       }),
+      pageContent: '',
       ...props,
     });
   }
 
-  getPageContent() {
-    const element = new Button({text: `new one ${this.currentPage}`});
-    const contentElement = document.getElementById('content');
-    contentElement.replaceWith(element.getContent());
+  changeCurrentPage(pageId: string) {
+    let newContent: Block | null = null;
+
+    switch (pageId) {
+      case 'login':
+        // no proxy on children so it doesnt trigger rerender - this.pageContent = ...
+        // do it явно
+        newContent = new Button({
+          text: 'hehe',
+          onClick: () => {},
+        });
+        break;
+      case 'register':
+        // no proxy on children so it doesnt trigger rerender - this.pageContent = ...
+        // do it явно
+        newContent = new Button({
+          text: 'olololo',
+          onClick: () => {},
+        });
+        break;
+      }
+
+      if (newContent) {
+        // this will triger rerender
+        this.changeChild({
+          pageContent: newContent
+        })
+      }
   }
 
   override render() {
     return `
         <div class="{{class}}">
           {{{ nav }}}
-          <div id="content"></div>
+          {{{ pageContent }}}
         </div>
     `;
   }

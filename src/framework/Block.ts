@@ -132,6 +132,17 @@ export class Block {
     });
   };
 
+  public changeChild(newProps: ChildenAsProps): void {
+    console.log('changeChild');
+    const oldData = {...this.children} 
+    Object.assign(this.children, {
+      ...this.children,
+      ...newProps,
+    });
+
+    this.eventBus().emit(Block.EVENTS.FLOW_CDU, oldData, this.children);
+  };
+
   _render() {
     console.log('Render', this);
     const propsAndStubs = { ...this.primitiveProps };
