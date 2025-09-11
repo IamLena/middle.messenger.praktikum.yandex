@@ -27,7 +27,12 @@ class Page {
         switch (name) {
             case 'login':
                 page = new Button({
-                    text: 'helllo world!'
+                    text: 'helllo world!',
+                    events: {
+                        'click': () => {console.log('button click')}
+                    },
+                    class: 'my-button-class',
+                    type: 'submit',
                 })
                 // page = LoginPage;
                 // page = new LoginPage();

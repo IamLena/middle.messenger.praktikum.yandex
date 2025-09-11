@@ -1,12 +1,13 @@
-import { EventBus } from './EventBus';
+import { EventBus, type EventsToPass } from './EventBus';
 import {v4 as makeUUID} from 'uuid';
 import Handlebars from 'handlebars';
 
-type PrimitiveAsProps = Record<string, string | number | boolean | null | undefined >; // ?
+type AnyProps = Record<string, any>;
+type PrimitiveAsProps = AnyProps;
+// Record<string, string | number | boolean | null | undefined | AnyProps >; // ?
 type ChildenAsProps = Record<string, Block>;
 type ListsAsProps = Record<string, any[]>;
 type BlockProps = PrimitiveAsProps & ChildenAsProps & ListsAsProps;
-type AnyProps = Record<string, any>;
 
 export class Block {
   static EVENTS = {
@@ -18,6 +19,7 @@ export class Block {
 
   protected _element: HTMLElement | null = null;
   protected _id: string = makeUUID();
+  protected events: EventsToPass = {};
   protected primitiveProps: PrimitiveAsProps;
   protected children: ChildenAsProps;
   protected lists: ListsAsProps;
@@ -43,12 +45,14 @@ export class Block {
     eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this));
   }
 
-  public init(props: BlockProps = {}) {
+  public init({events = {}, ...props}: BlockProps = {}) {
     const { primitiveProps, children, lists } = this._parseProps(props);
 
+    this.events = events;
     this.primitiveProps = this._makePropsProxy({ ...primitiveProps });
     this.children = children; // should _makePropsProxy to rerender when child changed?
     this.lists = this._makePropsProxy({ ...lists });
+    console.log('init', this);
   }
 
   private _parseProps(props: BlockProps = {}) {
@@ -56,6 +60,7 @@ export class Block {
     const children: ChildenAsProps = {};
     const lists: ListsAsProps = {};
 
+    console.log('props to parse', props);
     Object.entries(props).forEach(([key, value])=> {
       if (value instanceof Block) {
         children[key] = value;
@@ -132,6 +137,7 @@ export class Block {
     });
 
     const fragment = this._createDocumentElement('template');
+    console.log('propsAndStubs', propsAndStubs);
     fragment.innerHTML = Handlebars.compile(this.render())(propsAndStubs);
 
     Object.values(this.children).forEach(child => {
@@ -162,8 +168,7 @@ export class Block {
       this._element.replaceWith(newElement);
     }
     this._element = newElement;
-    // this._addEvents();
-    // this.addAttributes();
+    this._addEvents();
   }
 
   private _createDocumentElement(tagName: string): HTMLTemplateElement {
@@ -179,6 +184,15 @@ export class Block {
       throw new Error('Element is not created');
     }
     return this._element;
+  }
+
+  private _addEvents() {
+    if (!this._element) {
+      throw new Error('Element is not created');
+    }
+    Object.keys(this.events).forEach(eventName => {
+      this._element!.addEventListener(eventName, this.events[eventName]);
+    })
   }
 
   public show(): void {

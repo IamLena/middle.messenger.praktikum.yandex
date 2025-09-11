@@ -5,14 +5,16 @@ import buttonTemplate from "./button.tmpl";
 export class Button extends Block {
   constructor(props) {
 		// Создаём враппер дом-элемент button
-    super("button", props);
+    super(props);
   }
 
-  render() {
-    const template = Handlebars.compile(buttonTemplate);
-    const content = template(this.props);
+  override render() {
+    console.log('render button');
+    return buttonTemplate;
+    // const template = Handlebars.compile(buttonTemplate);
+    // const content = template(this.props);
 
-    return content;
+    // return content;
   }
 }
 
