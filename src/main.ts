@@ -3,10 +3,7 @@ import {
     // RegisterPage,
 } from './pages';
 
-import { Button } from './components/button';
-import { Link } from './components/link';
-import { Input } from './components/input';
-import { Form } from './components/form';
+import { Button, Link, Input, Form } from './components';
 
 console.log('main.ts');
 

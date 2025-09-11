@@ -1,7 +1,7 @@
-import { Block } from "../framework/Block";
-import { type EventsToPass } from '../framework/EventBus';
+import { Block } from "../../framework/Block";
+import { type EventsToPass } from '../../framework/EventBus';
 
-type InputProps = {
+export type InputProps = {
   id: string,
   label: string,
   type: string,

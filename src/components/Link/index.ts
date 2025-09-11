@@ -1,7 +1,7 @@
-import { Block } from "../framework/Block";
-import { type EventsToPass } from '../framework/EventBus';
+import { Block } from "../../framework/Block";
+import { type EventsToPass } from '../../framework/EventBus';
 
-type LinkProps = {
+export type LinkProps = {
   url: string,
   text: string,
   events?: EventsToPass,

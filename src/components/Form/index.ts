@@ -1,9 +1,9 @@
-import { Block } from "../framework/Block";
-import { Button, type ButtonProps } from './button';
-import { Input, type InputProps } from './input';
+import { Block } from "../../framework/Block";
+import { Button, type ButtonProps } from '../Button';
+import { Input, type InputProps } from '../Input';
 
 
-type FormProps = {
+export type FormProps = {
   header: string,
   class?: string,
   btnProps: ButtonProps,
