@@ -3,8 +3,8 @@ import css from './index.module.css'
 
 export type ButtonProps = {
   text: string,
-  type: string,
   onClick: () => void, 
+  type?: string,
   class?: string,
 };
 
@@ -14,8 +14,8 @@ export class Button extends Block {
       events: {
         'click': onClick,
       },
-      ...props,
       class: css.button,
+      ...props,
     });
   }
 

@@ -125,6 +125,13 @@ export class Block {
     Object.assign(this.primitiveProps, nextProps);
   };
 
+  public addProps(newProps: PrimitiveAsProps): void {
+    Object.assign(this.primitiveProps, {
+      ...this.primitiveProps,
+      ...newProps,
+    });
+  };
+
   _render() {
     console.log('Render', this);
     const propsAndStubs = { ...this.primitiveProps };

@@ -3,7 +3,7 @@ import {
     // RegisterPage,
 } from './pages';
 
-import { Button, Link, Input, Form } from './components';
+import { Button, Link, Input, Form, Nav, Page as PageOlolo } from './components';
 
 console.log('main.ts');
 
@@ -26,12 +26,15 @@ class Page {
 
         switch (name) {
             case 'login':
-                page = new Button({
-                    text: 'helllo world!',
-                    onClick: () => {console.log('button click')},
-                    class: 'my-button-class',
-                    type: 'submit',
-                })
+                page = new PageOlolo({
+
+                });
+                // page = new Button({
+                //     text: 'helllo world!',
+                //     onClick: () => {console.log('button click')},
+                //     class: 'my-button-class',
+                //     type: 'submit',
+                // })
                 // page = LoginPage;
                 // page = new LoginPage();
                 break;

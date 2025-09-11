@@ -1,16 +1,21 @@
 import { Block } from "../../framework/Block";
-import { type EventsToPass } from '../../framework/EventBus';
 
 export type LinkProps = {
-  url: string,
   text: string,
-  events?: EventsToPass,
+  url?: string,
+  onClick?: (...args: any[]) => void;
   class?: string,
 };
 
 export class Link extends Block {
-  constructor(props: LinkProps) {
-    super(props);
+  constructor({onClick, ...props}: LinkProps) {
+    super({
+      events: {
+        'click': onClick,
+      },
+      // class: css.link,
+      ...props,
+    });
   }
 
   override render() {
