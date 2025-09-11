@@ -1,5 +1,7 @@
 import { Block } from "../framework/Block";
 import { type EventsToPass } from '../framework/EventBus';
+import css from './button.module.css'
+
 
 type ButtonProps = {
   text: string,
@@ -15,7 +17,8 @@ export class Button extends Block {
       events: {
         'click': onClick,
       },
-      ...props
+      ...props,
+      class: css.button,
     });
   }
 
