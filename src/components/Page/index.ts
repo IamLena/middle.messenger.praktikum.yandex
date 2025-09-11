@@ -1,7 +1,7 @@
 import { Block } from "../../framework/Block";
 import css from "./index.module.css";
 import { Nav } from "..";
-import { LoginPage, RegisterPage } from "../../newPages";
+import { LoginPage, RegisterPage, ProfilePage } from "../../newPages";
 
 export type PageProps = {
   class?: string;
@@ -30,6 +30,9 @@ export class Page extends Block {
         break;
       case 'register':
         newContent = new RegisterPage({});
+        break;
+      case 'profile':
+        newContent = new ProfilePage({});
         break;
       }
 
