@@ -7,7 +7,7 @@ type PrimitiveAsProps = AnyProps;
 // Record<string, string | number | boolean | null | undefined | AnyProps >; // ?
 type ChildenAsProps = Record<string, Block>;
 type ListsAsProps = Record<string, any[]>;
-type BlockProps = PrimitiveAsProps & ChildenAsProps & ListsAsProps;
+type BlockProps = AnyProps; //PrimitiveAsProps & ChildenAsProps & ListsAsProps;
 
 export class Block {
   static EVENTS = {

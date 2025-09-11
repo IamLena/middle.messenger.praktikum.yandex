@@ -4,6 +4,8 @@ import {
 } from './pages';
 
 import { Button } from './components/button';
+import { Link } from './components/link';
+import { Input } from './components/input';
 
 console.log('main.ts');
 
@@ -39,6 +41,21 @@ class Page {
                 break;
             case 'register':
                 // page = new RegisterPage();
+                page = new Link({
+                    text: 'helllo world!',
+                    url: 'https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener',
+                    class: 'my-link-class',
+                })
+                break;
+            case 'profile':
+                // page = new RegisterPage();
+                page = new Input({
+                    id: 'input',
+                    label: 'label',
+                    type: 'text',
+                    name: 'my-input',
+                    class: 'my-input-class',
+                })
                 break;
         }
 

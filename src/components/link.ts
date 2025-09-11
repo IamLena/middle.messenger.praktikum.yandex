@@ -1,19 +1,19 @@
 import { Block } from "../framework/Block";
 import { type EventsToPass } from '../framework/EventBus';
 
-type ButtonProps = {
+type LinkProps = {
+  url: string,
   text: string,
-  type: string,
   events?: EventsToPass,
   class?: string,
 };
 
-export class Button extends Block {
-  constructor(props: ButtonProps) {
+export class Link extends Block {
+  constructor(props: LinkProps) {
     super(props);
   }
 
   override render() {
-    return '<button class="{{class}}" type="{{type}}">{{text}}</button>';
+    return '<a href="{{url}}" class="{{class}}">{{text}}</a>';
   }
 }
