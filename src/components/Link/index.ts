@@ -13,7 +13,6 @@ export class Link extends Block {
       events: {
         'click': onClick,
       },
-      // class: css.link,
       ...props,
     });
   }

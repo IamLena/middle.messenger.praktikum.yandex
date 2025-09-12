@@ -12,17 +12,19 @@ export type ErrorMessageProps = {
 export class ErrorMessage extends Block {
   constructor({linkData, ...props}: ErrorMessageProps) {
     super({
-      link: linkData ? new Link(linkData) : undefined,
       ...props,
+      link: linkData ? new Link(linkData) : undefined,
     });
   }
 
   override render() {
     return `
     <div class="${css.container}">
-      <h1 class="${css.code}">{{ code }}</h1>
-      <p class="${css.message}">{{ message }}</p>
-      {{{ link }}}
+      <div class="${css.error}">
+        <span class="${css.code}">{{ code }}</span>
+        <span class="${css.message}">{{ message }}</span>
+        {{{ link }}}
+      </div>
     </div>
     `;
   }

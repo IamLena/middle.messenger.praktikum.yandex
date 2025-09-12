@@ -3,7 +3,6 @@ import { Button, type ButtonProps } from '../Button';
 import { Input, type InputProps } from '../Input';
 import css from './index.module.css'
 
-
 export type FormProps = {
   header: string,
   class?: string,
@@ -19,8 +18,10 @@ export class Form extends Block {
       onClick: (event) => {
           event.preventDefault();
           event.stopPropagation();
-          console.log('click in form');
           this.getValues();
+          if (btnProps.onClick) {
+            btnProps.onClick(event);
+          }
       },
     });
 
@@ -29,10 +30,9 @@ export class Form extends Block {
     );
 
     super({
+      ...props,
       button,
       inputs,
-      class: css.form,
-      ...props,
     });
   }
 
@@ -40,7 +40,6 @@ export class Form extends Block {
     const formElement = this.getContent();
     const formData = new FormData(formElement as HTMLFormElement);
 
-    // Iterate through all key-value pairs
     for (const [key, value] of formData.entries()) {
       console.log(`${key}: ${value}`);
     }
@@ -48,7 +47,7 @@ export class Form extends Block {
 
   override render() {
     return `
-        <form class="{{class}}">
+        <form class="${css.form} {{{class}}}">
             <h1>{{header}}</h1>
             {{{ inputs }}}
             {{{ button }}}

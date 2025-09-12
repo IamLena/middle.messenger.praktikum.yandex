@@ -62,7 +62,6 @@ export class Block {
     this.lists = lists;
 
     this.props = this._makePropsProxy({ ...props });
-    console.log('init', this.props);
 
     this.events = this.props.events || {};
     this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
@@ -106,10 +105,8 @@ export class Block {
         return typeof value === 'function' ? value.bind(target) : value;
       },
       set(target: any, prop: string, value: any) {
-        console.log('set new value', prop, value);
         const oldTarget = { ...target };
         target[prop] = value;
-        console.log('triger update');
         if (value instanceof Block) {
           children[prop] = value;
         } else if (Array.isArray(value)) {
@@ -169,7 +166,6 @@ export class Block {
     // внутрь template вставляем компиляюцию шаблонизатора с применением параметров propsAndStubs
     // на этом этапе вместо вложенных компонентов имеем заглушки
     const fragment = this._createDocumentElement('template');
-    console.log('propsAndStubs', propsAndStubs);
     fragment.innerHTML = Handlebars.compile(this.render())(propsAndStubs);
 
     // заменяем заглушки вложенных детей на компоненты

@@ -1,13 +1,15 @@
+@import '../../variables.css';
+
 .button {
     width: 298px;
     padding: 4px;
     font-size: 16px;
     border-radius: 5px;
     color: aliceblue;
-    background-color: rgb(102, 81, 81);
+    background-color: var(--primary-color);
     margin: 10px auto;
 
     &:hover {
-        background-color: rgb(70, 55, 55);
+        background-color: var(--secondary-color);
     }
 }

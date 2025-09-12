@@ -1,14 +1,25 @@
 import { Block } from "../../framework/Block";
-import { LoginPage, RegisterPage, ProfilePage } from "../../newPages";
-import { Nav, ErrorMessage } from "..";
+import { LoginPage, RegisterPage, ProfilePage } from "../../pages";
+import { Link, ErrorMessage } from "..";
 import css from "./index.module.css";
+
+const pageIds = ["login", "register", "profile", "chats", "notFound", "fatal"];
 export class Page extends Block {
   constructor() {
+    const pagesLinks = pageIds.map(
+      (pageId) =>
+        new Link({
+          text: pageId,
+          class: css.pageLink,
+          onClick: (event: MouseEvent) => {
+            event.preventDefault();
+            this.changeCurrentPage(pageId)
+          },
+        })
+    );
     super({
-      nav: new Nav({
-        onClick: (pageId) => this.changeCurrentPage(pageId),
-      }),
-      pageContent: '',
+      pagesLinks,
+      pageContent: new LoginPage({}),
     });
   }
 
@@ -48,7 +59,6 @@ export class Page extends Block {
       }
       
       if (newContent) {
-        console.log('newContent', newContent);
         this.props.pageContent = newContent;
       }
   }
@@ -56,7 +66,9 @@ export class Page extends Block {
   override render() {
     return `
         <div class="{{${css.pageContent}}}">
-          {{{ nav }}}
+          <nav class="${css.menu}">
+              {{{ pagesLinks }}}
+          </nav>
           {{{ pageContent }}}
         </div>
     `;

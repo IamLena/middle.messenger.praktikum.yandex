@@ -3,7 +3,7 @@ import css from './index.module.css'
 
 export type ButtonProps = {
   text: string,
-  onClick: () => void, 
+  onClick?: (event: Event) => void, 
   type?: string,
   class?: string,
 };
@@ -11,17 +11,16 @@ export type ButtonProps = {
 export class Button extends Block {
   constructor({onClick, ...props}: ButtonProps) {
     super({
+      ...props,
       events: {
         'click': onClick,
       },
-      class: `${css.button} ${props.class}`,
-      ...props,
     });
   }
 
   override render() {
     return `
-      <button class="{{class}}" type="{{type}}">
+      <button class="${css.button} {{class}}" type="{{type}}">
         {{text}}
       </button>
     `;
