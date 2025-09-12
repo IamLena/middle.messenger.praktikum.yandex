@@ -4,3 +4,4 @@ export { Input } from './Input';
 export { Form } from './Form';
 export { Nav } from './Nav';
 export { Page } from './Page';
+export { ErrorMessage } from './ErrorMessage';

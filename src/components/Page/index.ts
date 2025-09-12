@@ -1,24 +1,14 @@
 import { Block } from "../../framework/Block";
-import css from "./index.module.css";
-import { Nav } from "..";
 import { LoginPage, RegisterPage, ProfilePage } from "../../newPages";
-import { ErrorMessage } from "../ErrorMessage";
-
-export type PageProps = {
-  class?: string;
-};
-
+import { Nav, ErrorMessage } from "..";
+import css from "./index.module.css";
 export class Page extends Block {
-  // currentPage: string = "login";
-
-  constructor(props: PageProps) {
+  constructor() {
     super({
       nav: new Nav({
         onClick: (pageId) => this.changeCurrentPage(pageId),
       }),
       pageContent: '',
-      class: css.pageContent,
-      ...props,
     });
   }
 
@@ -67,7 +57,7 @@ export class Page extends Block {
 
   override render() {
     return `
-        <div class="{{class}}">
+        <div class="{{${css.pageContent}}}">
           {{{ nav }}}
           {{{ pageContent }}}
         </div>

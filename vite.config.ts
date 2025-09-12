@@ -14,7 +14,7 @@ export default defineConfig({
   preview: { port: 3000 },
   css: {
     modules: {
-      localsConvention: 'camelCase', // Ensures class names are camelCase in JS
+      localsConvention: 'camelCase',
     },
   },
 });
