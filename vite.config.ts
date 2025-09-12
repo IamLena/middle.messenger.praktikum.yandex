@@ -7,12 +7,6 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: 'src/index.html',
-        login: 'src/pages/login/index.html',
-        register: 'src/pages/register/index.html',
-        profile: 'src/pages/profile/index.html',
-        chats: 'src/pages/chats/index.html',
-        notFound: 'src/pages/notFound/index.html',
-        fatal: 'src/pages/fatal/index.html',
       },
     },
   },
