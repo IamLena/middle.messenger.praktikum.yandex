@@ -18,7 +18,7 @@ export class Form extends Block {
       onClick: (event) => {
           event.preventDefault();
           event.stopPropagation();
-          this.getValues();
+          this.submitForm();
           if (btnProps.onClick) {
             btnProps.onClick(event);
           }
@@ -36,13 +36,27 @@ export class Form extends Block {
     });
   }
 
-  getValues() {
-    const formElement = this.getContent();
-    const formData = new FormData(formElement as HTMLFormElement);
+  // getValues() {
+  //   const formElement = this.getContent();
+  //   const formData = new FormData(formElement as HTMLFormElement);
 
-    for (const [key, value] of formData.entries()) {
-      console.log(`${key}: ${value}`);
-    }
+  //   for (const [key, value] of formData.entries()) {
+  //     console.log(`${key}: ${value}`);
+  //   }
+
+  //   return formData;
+  // }
+
+  validate() {
+    return this.props.inputs.map(input => {
+      console.log('input', input);
+      return input.validate();
+    });
+  }
+
+  submitForm() {
+    const data = this.validate();
+    console.log('data', data);
   }
 
   override render() {

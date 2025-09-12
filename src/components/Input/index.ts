@@ -9,11 +9,23 @@ export type InputProps = {
   value?: string
   events?: EventsToPass,
   class?: string,
+  validate: (value: string) => string | null;
 };
 
 export class Input extends Block {
   constructor(props: InputProps) {
-    super(props);
+    super({
+      ...props,
+      events: {
+        'blur': (event) => props.validate(event.target.value),
+      }
+    });
+  }
+
+  validate() {
+    console.log('validate input');
+    const value = this.getContent().querySelector(`#${this.props.id}`).value;
+    return this.props.validate(value);
   }
 
   override render() {
