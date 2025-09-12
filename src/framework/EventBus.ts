@@ -1,10 +1,9 @@
+import { NO_HANDLER_ERROR } from '../errorConsts';
+
 type Handler = (...args: any[]) => void;
 type EventName = string;
 export type EventsToPass = Record<string, Handler>;
 type Listeners = Record<string, Handler[]>;
-
-const NO_HANDLER_ERROR = (eventName: EventName) => `There is no handler for event: ${eventName}`;
-
 export class EventBus {
   listeners: Listeners;
 

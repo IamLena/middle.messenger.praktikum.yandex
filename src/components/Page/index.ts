@@ -48,10 +48,8 @@ export class Page extends Block {
       }
       
       if (newContent) {
-        // this will triger rerender
-        this.changeChild({
-          pageContent: newContent
-        })
+        console.log('newContent', newContent);
+        this.props.pageContent = newContent;
       }
   }
 
