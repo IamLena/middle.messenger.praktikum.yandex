@@ -5,7 +5,7 @@ export type Props = {
   
 };
 
-export class ChatsPage extends Block {
+export class RightPane extends Block {
   constructor(props: Props) {
     super({
       ...props,
@@ -15,8 +15,8 @@ export class ChatsPage extends Block {
   override render() {
     return `
       <div class="{{class}}">
-        {{ leftPane }}
-        {{ rightPane }}
+        {{ chatHistory }}
+        {{ compose }}
       </div>
     `;
   }
