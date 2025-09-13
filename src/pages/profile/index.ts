@@ -1,6 +1,8 @@
 import { Block } from "../../framework/Block";
 import css from './index.module.css'
 import { Form } from '../../components';
+import { emailValidation, loginValidation, nameValidation, passwordValidation, phoneValidation } from '../../validation';
+
 
 export type Props = {
   
@@ -23,12 +25,14 @@ export class ProfilePage extends Block {
             type: 'text',
             name: 'first_name',
             value: 'my first name',
+            validate: nameValidation,
         },{
             id: 'second_name',
             label: 'second name',
             type: 'text',
             name: 'second_name',
             value: 'my second name',
+            validate: nameValidation,
         },{
             id: 'display_name',
             label: 'display name',
@@ -41,28 +45,33 @@ export class ProfilePage extends Block {
             type: 'email',
             name: 'email',
             value: 'my@email.com',
+            validate: emailValidation,
         },{
             id: 'phone',
             label: 'phone',
             type: 'phone',
             name: 'phone',
             value: '+7(777)777-77-77',
+            validate: phoneValidation,
         },{
             id: 'login',
             label: 'login',
             type: 'text',
             name: 'login',
             value: 'login',
+            validate: loginValidation,
         },{
             id: 'oldPassword',
             label: 'old password',
             type: 'password',
             name: 'oldPassword',
+            validate: passwordValidation,
         },{
             id: 'newPassword',
             label: 'new password',
             type: 'password',
             name: 'newPassword',
+            validate: passwordValidation,
         }],
         btnProps: { text: 'Save' },
       }),

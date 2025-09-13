@@ -1,10 +1,8 @@
 import { Block } from "../../framework/Block";
 import { type EventsToPass } from '../../framework/EventBus';
-import { Input as InputLine } from './input';
 
 export type InputProps = {
   id: string,
-  label: string,
   type: string,
   name: string,
   value?: string
@@ -17,22 +15,28 @@ export class Input extends Block {
   constructor(props: InputProps) {
     super({
       ...props,
-      input: new InputLine({
-        ...props,
-      }),
+      events: {
+        'focus': () => {console.log('focus')},
+        'blur': () => this.validate(),
+        // 'click': () => {console.log('click')},
+      }
     });
   }
 
+  getValue() {
+    return this.getContent().value;
+  }
+
   validate() {
-    return this.props.input.validate();
+    if (this.props.validate) {
+      console.log('validate input');
+      return this.props.validate(this.getValue());
+    }
   }
 
   override render() {
     return `
-        <div>
-            <label for="{{id}}">{{label}}</label>
-            {{{ input }}}
-        </div>
+      <input type="{{type}}" id="{{id}}" name="{{name}}" value="{{value}}">
     `;
   }
 }

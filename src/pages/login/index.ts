@@ -1,7 +1,7 @@
 import { Block } from "../../framework/Block";
 import css from './index.module.css'
 import { Form, Link } from '../../components';
-import { loginValidation } from '../../validation';
+import { loginValidation, passwordValidation } from '../../validation';
 
 export type Props = {
   
@@ -24,7 +24,7 @@ export class LoginPage extends Block {
             label: 'password:',
             type: 'password',
             name: 'password',
-            validate: (value) => { console.log('validate password', value) },
+            validate: passwordValidation,
         }],
         btnProps: { text: 'Sign in' },
       }),
