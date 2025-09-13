@@ -4,3 +4,5 @@ export { Input } from './Input';
 export { Form } from './Form';
 export { Page } from './Page';
 export { ErrorMessage } from './ErrorMessage';
+export { ChatHistory } from './ChatHistory';
+export { Chat } from './Chat';

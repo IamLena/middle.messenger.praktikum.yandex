@@ -1,5 +1,5 @@
 import { Block } from "../../framework/Block";
-import { LoginPage, RegisterPage, ProfilePage } from "../../pages";
+import { LoginPage, RegisterPage, ProfilePage, ChatsPage } from "../../pages";
 import { Link, ErrorMessage } from "..";
 import css from "./index.module.css";
 
@@ -19,7 +19,7 @@ export class Page extends Block {
     );
     super({
       pagesLinks,
-      pageContent: new LoginPage({}),
+      pageContent: '', // new LoginPage({}),
     });
   }
 
@@ -54,6 +54,11 @@ export class Page extends Block {
         newContent = new ErrorMessage({
           code: 500,
           message: 'internal error',
+        });
+        break;
+      case 'chats':
+        newContent = new ChatsPage({
+
         });
         break;
       }

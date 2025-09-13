@@ -1,0 +1,35 @@
+.container {
+    height: 90vh;
+    display: flex;
+    flex-direction: row;
+}
+
+.leftPane {
+    width: 30%;
+    height: 100%;
+    border-right: solid;
+}
+
+.rightPane {
+    width: 70%;
+    height: 100%;
+
+    /* & div {
+        height: 85%;
+        background-color: beige;
+    } */
+}
+
+.profileLink {
+
+}
+
+.inlineForm {
+    display: flex;
+    flex-direction: row;
+}
+
+.inputContainer {
+    display: flex;
+    flex-direction: row;
+}

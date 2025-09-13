@@ -29,7 +29,7 @@ export class Input extends Block {
 
   override render() {
     return `
-        <div>
+        <div class="{{class}}">
             <label for="{{id}}">{{label}}</label>
             {{{ input }}}
         </div>
