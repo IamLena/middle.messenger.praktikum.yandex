@@ -1,28 +1,37 @@
 веб-приложение "мессенджер"
 
 Зависимости:
-- TypeScript (^5.9.2)
-- Vite (^7.1.3)
-    - Проект запускаenся на 3000 порту.
-    - Сборка и запуск проекта - `npm run start`
-    - Запуск проекта в режиме разработки  - `npm run dev`
-- PostCSS (^8.5.6)
-- Hаndlebars (с компиляцией на стороне клиента) (^4.7.8)
-- Netlify (настроен автодеплой из ветки deploy) - https://lenaschat.netlify.app/
+
+-   TypeScript (^5.9.2)
+    -   для проверки типизации `npm run check:ts`
+-   Vite (^7.1.3)
+    -   Проект запускаenся на 3000 порту.
+    -   Сборка и запуск проекта - `npm run start`
+    -   Запуск проекта в режиме разработки - `npm run dev`
+-   PostCSS (^8.5.6)
+-   Hаndlebars (с компиляцией на стороне клиента) (^4.7.8)
+-   Netlify (настроен автодеплой из ветки deploy) - https://lenaschat.netlify.app/
+-   Eslint (^9.35.0)
+    -   `npm run lint` и `npm run lint:fix`
+-   Stylelint (^16.24.0)
+    -   `npm run lint:css` и `npm run lint:css:fix`
 
 Экраны ([макеты](https://www.figma.com/design/DREP04CXtc20hg7oYzcThE/my-messenger?node-id=0-1&p=f&t=GT1khhNJKRhHLTQd-0))
-- Авторизация ([/pages/login/index.html](https://lenaschat.netlify.app/pages/login/index.html))
-    - с формой, имена полей: `login`, `password`
-    - с кнопкой `Sign in`
-    - с ссылкой на страницу регистрации `Register`
-- Регистрация ([/pages/register/index.html](https://lenaschat.netlify.app/pages/register/index.html))
-    - с формой, имена полей: `first_name`, `second_name`, `login`, `email`, `password`, `phone`
-    - с кнопкой `Sign up`
-- Список чатов и лента переписки ([/pages/chats/index.html](https://lenaschat.netlify.app/pages/chats/index.html))
-    - имя поля для ввода сообщения: `message`
-- Настройки пользователя ([/pages/profile/index.html](https://lenaschat.netlify.app/pages/profile/index.html))
-    - Имена полей для изменения информации о пользователе: `first_name`, `second_name`, `display_name`, `login`, `email`, `phone`
-    - Поле для изменения аватара: `avatar`
-    - Поля для изменения пароля: `oldPassword`, `newPassword`
-- Страница 404 ([/pages/notFound/index.html](https://lenaschat.netlify.app/pages/notFound/index.html))
-- Страница 5** ([/pages/fatal/index.html](https://lenaschat.netlify.app/pages/fatal/index.html))
+
+SPA приложение с генерацией на стороне клиента
+"старницы" на данном этапе меняются через меню, по кнопке меняем контент (без роутинга)
+
+Все поля форм имееют валидацию (`npm run validation:test` для запуска теста функций валидации):
+
+-   first_name, second_name — латиница или кириллица, первая буква должна быть заглавной, без пробелов и без цифр, нет спецсимволов (допустим только дефис).
+-   login — от 3 до 20 символов, латиница, может содержать цифры, но не состоять из них, без пробелов, без спецсимволов (допустимы дефис и нижнее подчёркивание).
+-   email — латиница, может включать цифры и спецсимволы вроде дефиса и подчёркивания, обязательно должна быть «собака» (@) и точка после неё, но перед точкой обязательно должны быть буквы.
+-   password — от 8 до 40 символов, обязательно хотя бы одна заглавная буква и цифра.
+-   phone — от 10 до 15 символов, состоит из цифр, может начинается с плюса.
+-   message — не должно быть пустым.
+
+Однако пока, пользователь не увидит сообщений об ошибки
+При сбрасывания фокуса с поля ввода или при сабмите формы - собираем и валидируем данные - в консоли можно увидеть лог
+невалидное поле возвращается как null
+
+проект содержит заготовку с работе с АПИ - HTTPTransport, пока не используется

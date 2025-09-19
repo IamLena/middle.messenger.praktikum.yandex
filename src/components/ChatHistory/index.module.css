@@ -1,0 +1,10 @@
+@import url("../../variables.css");
+
+.container {
+	height: calc(100% - var(--compose-height) - 20px);
+	background-color: aliceblue;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	padding: 10px;
+}
