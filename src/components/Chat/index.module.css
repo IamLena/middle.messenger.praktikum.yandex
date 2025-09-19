@@ -1,0 +1,57 @@
+.container {
+	height: 60px;
+	border-bottom: solid;
+	display: flex;
+	align-items: center;
+	padding: 5px;
+
+	&.selected {
+		background-color: yellow;
+	}
+}
+
+.info {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 250px;
+}
+
+.center {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	height: 40px;
+	margin-right: 10px;
+}
+
+.name {
+	font-size: 16px;
+	vertical-align: text-top;
+	font-weight: bold;
+}
+
+.message {
+	font-size: 12px;
+	vertical-align: baseline;
+	width: 100px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.meta {
+	display: flex;
+	flex-direction: column-reverse;
+	justify-content: space-between;
+	height: 40px;
+	align-items: flex-end;
+	font-size: 12px;
+}
+
+.dot {
+	width: 7px;
+	height: 7px;
+	border-radius: 50px;
+	background-color: red;
+}

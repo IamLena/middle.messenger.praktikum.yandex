@@ -1,0 +1,24 @@
+@import url("../../variables.css");
+
+.container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.code {
+	font-size: 8em;
+	color: var(--primary-color);
+}
+
+.message {
+	font-size: 3em;
+	color: var(--secondary-color);
+}
+
+.error {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}

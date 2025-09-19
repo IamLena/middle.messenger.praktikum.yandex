@@ -1,0 +1,13 @@
+.message {
+	padding: 5px 10px;
+	background-color: white;
+	width: 300px;
+	border-radius: 15px;
+	min-height: 2em;
+	box-shadow: 0 10px 30px rgb(0 0 0 / 15%);
+	align-self: flex-start;
+
+	&.mine {
+		align-self: flex-end;
+	}
+}

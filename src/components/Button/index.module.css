@@ -1,0 +1,15 @@
+@import url("../../variables.css");
+
+.button {
+	width: 298px;
+	padding: 4px;
+	font-size: 16px;
+	border-radius: 5px;
+	color: aliceblue;
+	background-color: var(--primary-color);
+	margin: 10px auto;
+
+	&:hover {
+		background-color: var(--secondary-color);
+	}
+}
