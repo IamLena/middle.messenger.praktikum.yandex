@@ -41,7 +41,10 @@ export class Form extends Block {
 	validate() {
 		const data = this.inputs.reduce(
 			(result: Record<string, string | null>, input: Input) => {
-				result[input.name] = input.validate();
+				const validationResult = input.validate();
+				result[input.name] = validationResult.isValid
+					? validationResult.value
+					: null;
 				return result;
 			},
 			{}

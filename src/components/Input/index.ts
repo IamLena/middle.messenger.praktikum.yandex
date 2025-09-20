@@ -1,5 +1,6 @@
 import { Block } from '../../framework/Block';
 import { InputLine, type InputLineProps } from '..';
+import { type setValidationErrorType } from '../InputLine';
 import css from './index.module.css';
 
 export type Props = InputLineProps & {
@@ -13,8 +14,7 @@ export class Input extends Block {
 	constructor({ class: className, label, ...props }: Props) {
 		const input = new InputLine({
 			...props,
-			setValidationError: (error: string) =>
-				this.setValidationError(error),
+			setValidationError: (error) => this.setValidationError(error),
 		});
 
 		super({
@@ -22,7 +22,6 @@ export class Input extends Block {
 			label,
 			class: className,
 			input,
-			error: '',
 		});
 
 		this.input = input;
@@ -32,9 +31,9 @@ export class Input extends Block {
 		return this.input.validate();
 	}
 
-	setValidationError(error: string) {
+	setValidationError: setValidationErrorType = (error) => {
 		this.props.error = error;
-	}
+	};
 
 	get name(): string {
 		return this.props.name as string;

@@ -1,6 +1,9 @@
 import { Block } from '../../framework/Block';
 import { type EventsToPass } from '../../framework/EventBus';
+import { type ValidationFunction } from '../../validation';
 import css from './index.module.css';
+
+export type setValidationErrorType = (error: string | undefined) => void;
 
 export type Props = {
 	id: string;
@@ -9,9 +12,9 @@ export type Props = {
 	value?: string;
 	events?: EventsToPass;
 	class?: string;
-	validate: (value: string) => string | null;
+	validate: ValidationFunction;
 	autocomplete?: string;
-	setValidationError?: (error: string) => void;
+	setValidationError?: setValidationErrorType;
 };
 
 export class InputLine extends Block {
@@ -26,13 +29,16 @@ export class InputLine extends Block {
 	}
 
 	validate() {
-		const { value, isValid, error } = this.props.validate(this.getValue());
+		const result = (this.props.validate as ValidationFunction)(
+			this.getValue()
+		);
+		const { value, isValid, error } = result;
 		this.props.value = value;
 		this.props.isInvalid = !isValid;
 		if (this.props.setValidationError) {
-			this.props.setValidationError(error);
+			(this.props.setValidationError as setValidationErrorType)(error);
 		}
-		return isValid ? value : null;
+		return result;
 	}
 
 	getValue() {

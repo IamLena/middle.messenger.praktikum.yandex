@@ -1,8 +1,9 @@
-export type ValidationFunction = (value: string) => {
+export type ValidationResult = {
 	value: string;
 	isValid: boolean;
 	error?: string;
 };
+export type ValidationFunction = (value: string) => ValidationResult;
 
 export const loginValidation: ValidationFunction = (value) => {
 	const isValid = /^(?=.*[a-zA-Z])[a-zA-Z0-9-_]{3,20}$/.test(value);
@@ -77,6 +78,5 @@ export const messageValidation: ValidationFunction = (value) => {
 	return {
 		value,
 		isValid,
-		error: isValid ? undefined : '',
 	};
 };

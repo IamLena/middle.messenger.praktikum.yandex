@@ -21,7 +21,10 @@ export class ProfilePage extends Block {
 						label: 'upload avatar image',
 						type: 'file',
 						name: 'avatar',
-						validate: (value) => value,
+						validate: (value) => ({
+							value,
+							isValid: true,
+						}),
 					},
 					{
 						id: 'first_name',
