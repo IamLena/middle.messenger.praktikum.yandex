@@ -13,7 +13,7 @@ export class Avatar extends Block {
 
 	override render() {
 		if (this.props.src) {
-			return `<img class="${css.avatar} {{class}}" src="{{src}}"/>`;
+			return `<img alt="avatar" class="${css.avatar} {{class}}" src="{{src}}"/>`;
 		}
 		return `<div class="${css.avatar} {{class}}"/>`;
 	}
