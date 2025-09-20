@@ -11,20 +11,28 @@ export type Props = {
 	class?: string;
 	validate: (value: string) => string | null;
 	autocomplete?: string;
+	setValidationError?: (error: string) => void;
 };
 
 export class InputLine extends Block {
-	validate: () => string | null;
-
 	constructor(props: Props) {
 		super({
 			...props,
 			events: {
 				blur: () => this.validate(),
 			},
+			isInvalid: false,
 		});
+	}
 
-		this.validate = () => props.validate(this.getValue());
+	validate() {
+		const { value, isValid, error } = this.props.validate(this.getValue());
+		this.props.value = value;
+		this.props.isInvalid = !isValid;
+		if (this.props.setValidationError) {
+			this.props.setValidationError(error);
+		}
+		return isValid ? value : null;
 	}
 
 	getValue() {
@@ -34,7 +42,7 @@ export class InputLine extends Block {
 	override render() {
 		return `
 			<input
-				class="${css.input} {{class}}"
+				class="${css.input} {{class}} ${this.props.isInvalid ? css.invalid : ''}"
 				type="{{type}}"
 				id="{{id}}"
 				name="{{name}}"

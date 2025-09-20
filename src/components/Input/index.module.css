@@ -4,3 +4,10 @@
 		width: 100px;
 	}
 }
+
+.error {
+	color: red;
+	width: 308px;
+	margin: 4px 0 6px 0;
+	font-size: 0.8em;
+}
