@@ -1,23 +1,22 @@
-import Handlebars from "handlebars";
-import pageTemplate from './page.tmpl.ts';
-import inputPartial from '../../components/input.tmpl.ts';
-import textPartial from '../../components/text.tmpl.ts';
+import { Block } from '../../framework/Block';
+import css from './index.module.css';
+import { LeftPane } from './leftPane';
+import { RightPane } from './rightPane';
 
-Handlebars.registerPartial('input', inputPartial);
-Handlebars.registerPartial('text', textPartial);
+export class ChatsPage extends Block {
+	constructor() {
+		super({
+			leftPane: new LeftPane(),
+			rightPane: new RightPane(),
+		});
+	}
 
-const chatsPageData = {
-    inputData: {
-        id: 'message',
-        label: 'message',
-        type: 'text',
-        name: 'message',
-    },
-    text: "your chats will be here soon",
-};
-
-const template = Handlebars.compile(pageTemplate);
-const appElement = document.querySelector('#app');
-if (appElement) {
-    appElement.innerHTML = template(chatsPageData);
+	override render() {
+		return `
+			<div class="${css.container}">
+				{{{ leftPane }}}
+				{{{ rightPane }}}
+			</div>
+		`;
+	}
 }

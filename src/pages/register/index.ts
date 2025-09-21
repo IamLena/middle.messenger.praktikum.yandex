@@ -1,58 +1,75 @@
-import Handlebars from "handlebars";
-import pageTemplate from './page.tmpl.ts';
-import formPartial from '../../components/form.tmpl.ts';
-import buttonPartial from '../../components/button.tmpl.ts';
-import inputPartial from '../../components/input.tmpl.ts';
-import linkPartial from '../../components/link.tmpl.ts';
-import commonCss from '../../styles/layout.module.css'
+import { Block } from '../../framework/Block';
+import css from './index.module.css';
+import { Form } from '../../components';
+import {
+	emailValidation,
+	loginValidation,
+	nameValidation,
+	passwordValidation,
+	phoneValidation,
+} from '../../validation';
 
-Handlebars.registerPartial('button', buttonPartial);
-Handlebars.registerPartial('link', linkPartial);
-Handlebars.registerPartial('input', inputPartial);
-Handlebars.registerPartial('form', formPartial);
+export class RegisterPage extends Block {
+	constructor() {
+		super({
+			form: new Form({
+				header: 'Register',
+				inputData: [
+					{
+						id: 'first_name',
+						label: 'first name',
+						type: 'text',
+						name: 'first_name',
+						validate: nameValidation,
+					},
+					{
+						id: 'second_name',
+						label: 'second name',
+						type: 'text',
+						name: 'second_name',
+						validate: nameValidation,
+					},
+					{
+						id: 'email',
+						label: 'email',
+						type: 'email',
+						name: 'email',
+						validate: emailValidation,
+					},
+					{
+						id: 'phone',
+						label: 'phone',
+						type: 'phone',
+						name: 'phone',
+						validate: phoneValidation,
+					},
+					{
+						id: 'login',
+						label: 'login',
+						type: 'text',
+						name: 'login',
+						validate: loginValidation,
+						autocomplete: 'username',
+					},
+					{
+						id: 'password',
+						label: 'password',
+						type: 'password',
+						name: 'password',
+						validate: passwordValidation,
+						autocomplete: 'current-password',
+					},
+				],
+				btnProps: { text: 'Sign up' },
+			}),
+		});
+	}
 
-const registerPageData = {
-    className: commonCss.main,
-    containerClassName: commonCss.container,
-    formData: {
-        formHeader: 'Register',
-        inputDatas: [{
-            id: 'first_name',
-            label: 'first name',
-            type: 'text',
-            name: 'first_name',
-        },{
-            id: 'second_name',
-            label: 'second name',
-            type: 'text',
-            name: 'second_name',
-        },{
-            id: 'email',
-            label: 'email',
-            type: 'email',
-            name: 'email',
-        },{
-            id: 'phone',
-            label: 'phone',
-            type: 'phone',
-            name: 'phone',
-        },{
-            id: 'login',
-            label: 'login',
-            type: 'text',
-            name: 'login',
-        },{
-            id: 'password',
-            label: 'password',
-            type: 'password',
-            name: 'password',
-        }],
-        text: 'Sign up',
-    },
-};
-
-const template = Handlebars.compile(pageTemplate);
-const appElement = document.querySelector('#app');
-if (appElement) {
-    appElement.innerHTML = template(registerPageData);
+	override render() {
+		return `
+			<div class="${css.container}">
+				{{{ form }}}
+			</div>
+		`;
+	}
 }

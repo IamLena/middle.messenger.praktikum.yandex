@@ -1,0 +1,8 @@
+.input {
+	display: inline-block;
+	padding: 0;
+}
+
+.invalid {
+	background-color: rgb(255 0 0 / 29.1%);
+}

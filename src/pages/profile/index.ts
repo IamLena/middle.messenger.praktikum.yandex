@@ -1,79 +1,107 @@
-import Handlebars from "handlebars";
-import pageTemplate from './page.tmpl.ts';
-import formPartial from '../../components/form.tmpl.ts';
-import buttonPartial from '../../components/button.tmpl.ts';
-import inputPartial from '../../components/input.tmpl.ts';
-import linkPartial from '../../components/link.tmpl.ts';
-import commonCss from '../../styles/layout.module.css'
+import { Block } from '../../framework/Block';
+import css from './index.module.css';
+import { Form } from '../../components';
+import {
+	emailValidation,
+	loginValidation,
+	nameValidation,
+	passwordValidation,
+	phoneValidation,
+	displayNameValidation,
+} from '../../validation';
 
-Handlebars.registerPartial('button', buttonPartial);
-Handlebars.registerPartial('link', linkPartial);
-Handlebars.registerPartial('input', inputPartial);
-Handlebars.registerPartial('form', formPartial);
+export class ProfilePage extends Block {
+	constructor() {
+		super({
+			form: new Form({
+				header: 'Profile',
+				inputData: [
+					{
+						id: 'avatar',
+						label: 'upload avatar image',
+						type: 'file',
+						name: 'avatar',
+						validate: (value) => ({
+							value,
+							isValid: true,
+						}),
+					},
+					{
+						id: 'first_name',
+						label: 'first name',
+						type: 'text',
+						name: 'first_name',
+						value: 'my first name',
+						validate: nameValidation,
+					},
+					{
+						id: 'second_name',
+						label: 'second name',
+						type: 'text',
+						name: 'second_name',
+						value: 'my second name',
+						validate: nameValidation,
+					},
+					{
+						id: 'display_name',
+						label: 'display name',
+						type: 'text',
+						name: 'display_name',
+						value: 'my display name',
+						validate: displayNameValidation,
+					},
+					{
+						id: 'email',
+						label: 'email',
+						type: 'email',
+						name: 'email',
+						value: 'my@email.com',
+						validate: emailValidation,
+					},
+					{
+						id: 'phone',
+						label: 'phone',
+						type: 'phone',
+						name: 'phone',
+						value: '+7(777)777-77-77',
+						validate: phoneValidation,
+					},
+					{
+						id: 'login',
+						label: 'login',
+						type: 'text',
+						name: 'login',
+						value: 'login',
+						validate: loginValidation,
+						autocomplete: 'username',
+					},
+					{
+						id: 'oldPassword',
+						label: 'old password',
+						type: 'password',
+						name: 'oldPassword',
+						validate: passwordValidation,
+						autocomplete: 'current-password',
+					},
+					{
+						id: 'newPassword',
+						label: 'new password',
+						type: 'password',
+						name: 'newPassword',
+						validate: passwordValidation,
+						autocomplete: 'new-password',
+					},
+				],
+				btnProps: { text: 'Save' },
+			}),
+		});
+	}
 
-const profilePageData = {
-    className: commonCss.main,
-    containerClassName: commonCss.container,
-    formData: {
-        formHeader: 'Profile',
-        inputDatas: [{
-            id: 'avatar',
-            label: 'upload avatar image',
-            type: 'file',
-            name: 'avatar',
-        },{
-            id: 'first_name',
-            label: 'first name',
-            type: 'text',
-            name: 'first_name',
-            value: 'my first name',
-        },{
-            id: 'second_name',
-            label: 'second name',
-            type: 'text',
-            name: 'second_name',
-            value: 'my second name',
-        },{
-            id: 'display_name',
-            label: 'display name',
-            type: 'text',
-            name: 'display_name',
-            value: 'my display name',
-        },{
-            id: 'email',
-            label: 'email',
-            type: 'email',
-            name: 'email',
-            value: 'my@email.com',
-        },{
-            id: 'phone',
-            label: 'phone',
-            type: 'phone',
-            name: 'phone',
-            value: '+7(777)777-77-77',
-        },{
-            id: 'login',
-            label: 'login',
-            type: 'text',
-            name: 'login',
-            value: 'login',
-        },{
-            id: 'oldPassword',
-            label: 'old password',
-            type: 'password',
-            name: 'oldPassword',
-        },{
-            id: 'newPassword',
-            label: 'new password',
-            type: 'password',
-            name: 'newPassword',
-        }],
-        text: 'Save',
-    },
-};
-
-const template = Handlebars.compile(pageTemplate);
-const appElement = document.querySelector('#app');
-if (appElement) {
-    appElement.innerHTML = template(profilePageData);
+	override render() {
+		return `
+			<div class="${css.container}">
+				{{{ form }}}
+			</div>
+		`;
+	}
 }
