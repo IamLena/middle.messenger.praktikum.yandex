@@ -46,7 +46,6 @@ export class Compose extends Block {
 
 	send() {
 		const data = this.validate();
-		console.log('message to send', data);
 	}
 
 	override render() {

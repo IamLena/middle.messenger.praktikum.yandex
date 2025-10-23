@@ -23,7 +23,8 @@ export class EventBus {
 	// remove certain handler
 	off(event: EventName, callback: Handler) {
 		if (!this.listeners[event]) {
-			throw new Error(NO_HANDLER_ERROR(event));
+			// throw new Error(NO_HANDLER_ERROR(event));
+			return;
 		}
 
 		this.listeners[event] = this.listeners[event].filter(
@@ -34,7 +35,8 @@ export class EventBus {
 	// emit an event = call all the handlers registered for it
 	emit(event: EventName, ...args: unknown[]) {
 		if (!this.listeners[event]) {
-			throw new Error(NO_HANDLER_ERROR(event));
+			return;
+			// throw new Error(NO_HANDLER_ERROR(event));
 		}
 
 		this.listeners[event].forEach(function (listener) {

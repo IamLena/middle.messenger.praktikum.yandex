@@ -9,4 +9,3 @@ export { Chat, type Props as ChatProps } from './Chat';
 export { Message, type Props as MessageProps } from './Message';
 export { InputLine, type Props as InputLineProps } from './InputLine';
 export { Avatar, type Props as AvatarProps } from './Avatar';
-export { CurrentPage } from './CurrentPage';

@@ -1,5 +1,5 @@
 .container {
-	height: 90vh;
+	height: 100vh;
 	display: flex;
 	flex-direction: row;
 }
@@ -17,8 +17,28 @@
 .right {
 	width: calc(100% - 300px);
 	height: 100%;
+	min-width: 400px;
 }
 
 .header {
-	height: 40px;
+	border-bottom: 1px solid black;
+
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+
+	button {
+		background-color: antiquewhite;
+		width: fit-content;
+		height: fit-content;
+		color: rgb(61, 59, 59);
+		margin: 0;
+	}
+
+	.form {
+		display: flex;
+		flex-direction: row;
+		padding: 4px;
+		align-items: flex-end;
+	}
 }

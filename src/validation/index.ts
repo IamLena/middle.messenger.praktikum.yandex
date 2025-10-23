@@ -5,8 +5,16 @@ export type ValidationResult = {
 };
 export type ValidationFunction = (value: string) => ValidationResult;
 
+export const okayValidation: ValidationFunction = (value) => {
+	return {
+		value,
+		isValid: true,
+	};
+};
+
 export const loginValidation: ValidationFunction = (value) => {
-	const isValid = /^(?=.*[a-zA-Z])[a-zA-Z0-9-_]{3,20}$/.test(value);
+	const isValid =
+		value === '' || /^(?=.*[a-zA-Z])[a-zA-Z0-9-_]{3,20}$/.test(value);
 	return {
 		value,
 		isValid,
@@ -17,7 +25,7 @@ export const loginValidation: ValidationFunction = (value) => {
 };
 
 export const passwordValidation: ValidationFunction = (value) => {
-	const isValid = /^(?=.*[A-Z])(?=.*\d).{8,40}$/.test(value);
+	const isValid = value === '' || /^(?=.*[A-Z])(?=.*\d).{8,40}$/.test(value);
 	return {
 		value,
 		isValid,
@@ -29,7 +37,9 @@ export const passwordValidation: ValidationFunction = (value) => {
 
 export const nameValidation: ValidationFunction = (value) => {
 	const isValid =
-		/^[A-Z][a-z-]*$/.test(value) || /^[А-ЯЁ][а-яё-]*$/.test(value);
+		value === '' ||
+		/^[A-Z][a-z-]*$/.test(value) ||
+		/^[А-ЯЁ][а-яё-]*$/.test(value);
 	return {
 		value,
 		isValid,
@@ -40,7 +50,7 @@ export const nameValidation: ValidationFunction = (value) => {
 };
 
 export const displayNameValidation: ValidationFunction = (value) => {
-	const isValid = Boolean(value);
+	const isValid = value === '' || Boolean(value);
 	return {
 		value,
 		isValid,
@@ -50,6 +60,7 @@ export const displayNameValidation: ValidationFunction = (value) => {
 
 export const emailValidation: ValidationFunction = (value) => {
 	const isValid =
+		value === '' ||
 		/^[0-9a-zA-Z.!#$%&’*+/=?^_{|}~-]+@[a-zA-Z]+\.[0-9a-zA-Z\-_]+$/.test(
 			value
 		);
@@ -63,7 +74,7 @@ export const emailValidation: ValidationFunction = (value) => {
 };
 
 export const phoneValidation: ValidationFunction = (value) => {
-	const isValid = /^(?=.{10,15}$)\+?\d+$/.test(value);
+	const isValid = value === '' || /^(?=.{10,15}$)\+?\d+$/.test(value);
 	return {
 		value,
 		isValid,
@@ -74,7 +85,7 @@ export const phoneValidation: ValidationFunction = (value) => {
 };
 
 export const messageValidation: ValidationFunction = (value) => {
-	const isValid = Boolean(value);
+	const isValid = value === '' || Boolean(value);
 	return {
 		value,
 		isValid,

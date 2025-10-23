@@ -8,6 +8,10 @@ import {
 	passwordValidation,
 	phoneValidation,
 } from '../../validation';
+import { AuthApi } from '../../api/auth';
+const signupAction = (data: SignupData) => {
+	AuthApi.signup(data);
+};
 
 export class RegisterPage extends Block {
 	constructor() {
@@ -60,7 +64,10 @@ export class RegisterPage extends Block {
 						autocomplete: 'current-password',
 					},
 				],
-				btnProps: { text: 'Sign up' },
+				btnProps: {
+					text: 'Sign up',
+				},
+				submit: signupAction,
 			}),
 		});
 	}

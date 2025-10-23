@@ -1,9 +1,11 @@
+import { queryStringify } from '../tools/queryStringify';
+
 enum METHOD {
-	GET ='GET',
-	PUT ='PUT',
-	POST ='POST',
-	DELETE ='DELETE',
-};
+	GET = 'GET',
+	PUT = 'PUT',
+	POST = 'POST',
+	DELETE = 'DELETE',
+}
 
 type Options = {
 	timeout?: number;
@@ -17,28 +19,13 @@ type Options = {
 		| undefined;
 };
 
-/**
- * Функцию реализовывать здесь необязательно, но может помочь не плодить логику у GET-метода
- * На входе: объект. Пример: {a: 1, b: 2, c: {d: 123}, k: [1, 2, 3]}
- * На выходе: строка. Пример: ?a=1&b=2&c=[object Object]&k=1,2,3
- */
-function queryStringify(data: Record<string, unknown>): string {
-	// Можно делать трансформацию GET-параметров в отдельной функции
-	if (typeof data === 'object') {
-		const keys = Object.keys(data);
-		if (keys.length !== 0) {
-			let result = '';
-			keys.forEach(
-				(key, index) =>
-					(result += `${index === 0 ? '?' : '&'}${key}=${data[key]}`)
-			);
-			return result;
-		}
-	}
-	return '';
-}
-
 export class HTTPTransport {
+	urlBase: string;
+
+	constructor(urlBase: string | undefined) {
+		this.urlBase = urlBase || '';
+	}
+
 	get = (url: string, options: Options = {}) => {
 		return this.request(
 			url,
@@ -71,7 +58,9 @@ export class HTTPTransport {
 		);
 	};
 
-	request = (url: string, options: Options, timeout = 5000) => {
+	request = (path: string, options: Options, timeout = 5000) => {
+		const url = this.urlBase + path;
+
 		const { method, headers = {}, data } = options;
 
 		if (!method) {
@@ -103,6 +92,8 @@ export class HTTPTransport {
 			Object.keys(headers).forEach((headerName) =>
 				xhr.setRequestHeader(headerName, headers[headerName])
 			);
+
+			xhr.withCredentials = true;
 
 			if (method === METHOD.GET || !data) {
 				xhr.send();

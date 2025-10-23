@@ -2,11 +2,12 @@ import { NO_ACCESS, NO_ELEMENT } from '../errorConsts';
 import { EventBus, type EventsToPass, type Handler } from './EventBus';
 import { v4 as makeUUID } from 'uuid';
 import Handlebars from 'handlebars';
+import { isEqual } from '../tools/isEqual';
 
 type AnyProps = Record<string, unknown>;
 type ChildenAsProps = Record<string, Block>;
 type ListsAsProps = Record<string, unknown[]>;
-type BlockProps = AnyProps;
+export type BlockProps = AnyProps;
 export class Block {
 	static EVENTS = {
 		INIT: 'init',
@@ -96,6 +97,16 @@ export class Block {
 		return { children, lists, props };
 	}
 
+	public updateProps(props: AnyProps) {
+		if (!isEqual(this.props, props)) {
+			Object.assign(this.props, props);
+		}
+	}
+
+	public updateLists(lists: ListsAsProps) {
+		Object.assign(this.lists, lists);
+	}
+
 	/**
 	 * оборачивает объект в прокси
 	 * тригерит componentDidUpdate при сете пропсов и запрещает удаление
@@ -146,7 +157,6 @@ export class Block {
 		oldProps: AnyProps,
 		newProps: AnyProps
 	): boolean {
-		console.log('componentDidUpdate', oldProps, newProps);
 		return true;
 	}
 
@@ -251,16 +261,18 @@ export class Block {
 	}
 
 	public show(): void {
-		const content = this.getContent();
-		if (content) {
-			content.style.display = 'block';
-		}
+		// const content = this.getContent();
+		// if (content) {
+		// 	content.style.display = 'block'; // неверно
+		// }
 	}
 
 	public hide(): void {
-		const content = this.getContent();
-		if (content) {
-			content.style.display = 'none';
-		}
+		// const content = this.getContent();
+		// if (content) {
+		// 	content.style.display = 'none';
+		// }
 	}
 }
+
+export type BlockClass = typeof Block;
