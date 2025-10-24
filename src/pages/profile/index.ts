@@ -20,7 +20,7 @@ import { connect } from '../../store/connect.ts';
 // change avatar
 // change password
 
-function getInputData(user) {
+function getInputData(user = {}) {
 	return [
 		{
 			id: 'avatar',

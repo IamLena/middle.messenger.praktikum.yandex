@@ -39,25 +39,18 @@ export class Route {
 	}
 
 	leave() {
-		if (this._block) {
-			this._block.hide();
-		}
+		// some saving logic before leaving the page may be here
 	}
 
 	match(pathname: string) {
-		// return isEqual(pathname, this._pathname);
-		// parse it!
 		return pathname === this._pathname;
 	}
 
 	render() {
-		if (!this._block) {
-			this._block = new this._blockClass();
-			render(this._block, this._props.rootSelector);
-			return;
-		}
-
-		this._block.show();
+		this._block = new this._blockClass();
+		// loading?
+		render(this._block, this._props.rootSelector);
+		return;
 	}
 }
 
@@ -102,7 +95,6 @@ export class Router {
 		window.onpopstate = () => {
 			this._onRoute(window.location.pathname);
 		};
-		// check for loged in?
 		this._onRoute(window.location.pathname);
 	}
 
@@ -122,9 +114,7 @@ export class Router {
 	}
 
 	go(pathname: string) {
-		// here passing url with query
 		this.history.pushState({}, '', pathname);
-		// here should pass and add query logic
 		this._onRoute(getPathname(pathname));
 	}
 

@@ -1,5 +1,5 @@
 import { AuthApi } from '../api/auth.ts';
-import { FatalError } from '../error.ts';
+import { ErrorWithCode } from '../api/error.ts';
 import { Router } from '../framework/Router.ts';
 import { store } from '../store/Store.ts';
 import { type LoginData, type RegisterData, type User } from '../types.ts';
@@ -31,10 +31,15 @@ export const authController = {
 			await authController.setCurrentUserToStore();
 			router.go('/messenger');
 		} catch (error) {
-			if (error instanceof FatalError) {
-				router.go('/fatal');
+			if (error instanceof ErrorWithCode) {
+				if (error.code === 409) {
+					// Login already exists
+					alert(error.message);
+				} else {
+					console.log('error', error);
+				}
 			} else {
-				//alert(`${error} ${(error as Error).cause}`);
+				console.log(error); // router.go('/fatal');
 			}
 		}
 	},
@@ -50,10 +55,15 @@ export const authController = {
 			await authController.setCurrentUserToStore();
 			router.go('/messenger');
 		} catch (error) {
-			if (error instanceof FatalError) {
-				router.go('/fatal');
+			if (error instanceof ErrorWithCode) {
+				if (error.code === 400 || error.code === 401) {
+					alert(error.message);
+					return;
+				} else if (error.code === 500) {
+					console.log(error); // router.go('/fatal');
+				}
 			} else {
-				//alert(`${error} ${(error as Error).cause}`);
+				console.log(error); // router.go('/fatal');
 			}
 		}
 	},
@@ -62,13 +72,12 @@ export const authController = {
 		try {
 			const user: User = await AuthApi.getCurrentUser();
 			store.set('currentUser', user);
-			store.set(`users.${user.id}`, user);
 		} catch (error) {
-			if (error instanceof FatalError) {
-				const router = new Router();
-				router.go('/fatal');
+			if (error instanceof ErrorWithCode) {
+				console.log(error, error.code, error.message);
+				throw new ErrorWithCode(error.message, error.code);
 			} else {
-				//alert(`${error} ${(error as Error).cause}`);
+				console.log(error);
 			}
 		}
 	},
@@ -77,14 +86,13 @@ export const authController = {
 		const router = new Router();
 		try {
 			await AuthApi.logout();
-			store.invalidate('currentUser');
-			// invalidate all store
+			store.reset();
 			router.go('/');
 		} catch (error) {
-			if (error instanceof FatalError) {
-				router.go('/fatal');
+			if (error instanceof ErrorWithCode) {
+				console.log(error, error.code, error.message);
 			} else {
-				//alert(`${error} ${(error as Error).cause}`);
+				console.log(error); // router.go('/fatal');
 			}
 		}
 	},

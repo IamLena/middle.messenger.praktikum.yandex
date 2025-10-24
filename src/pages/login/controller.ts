@@ -17,7 +17,7 @@ export const LoginController = {
 			router.go('/messenger');
 		} catch (error) {
 			if (error instanceof FatalError) {
-				router.go('/fatal');
+				console.log(error); // router.go('/fatal');
 			} else {
 				alert((error as Error).cause);
 			}

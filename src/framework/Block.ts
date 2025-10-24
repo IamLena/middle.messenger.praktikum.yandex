@@ -60,8 +60,8 @@ export class Block {
 	 * запускаем рендеринг
 	 * @param props - объект параметров любого типа
 	 */
-	public init(propsToPars: BlockProps = {}) {
-		const { children, lists, props } = this._parseProps(propsToPars);
+	public init(propsToParse: BlockProps = {}) {
+		const { children, lists, props } = this._parseProps(propsToParse);
 		this.children = children;
 		this.lists = this._makePropsProxy({ ...lists }) as Record<
 			string,
@@ -69,7 +69,8 @@ export class Block {
 		>;
 		this.props = this._makePropsProxy({ ...props });
 
-		this.events = (this.props.events || {}) as EventsToPass;
+		const events = this.props.events || {};
+		this.events = this._makeEventsProxy({ ...events }) as EventsToPass;
 		this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
 	}
 
@@ -124,6 +125,26 @@ export class Block {
 				const oldTarget = { ...target };
 				target[prop] = value;
 				eventBus.emit(Block.EVENTS.FLOW_CDU, oldTarget, target);
+				return true;
+			},
+			deleteProperty() {
+				throw new Error(NO_ACCESS('for deleting properties of Block'));
+			},
+		});
+	}
+
+	private _makeEventsProxy(props: AnyProps) {
+		const removeEvents = this._removeEvents;
+		const addEvents = this._addEvents;
+		return new Proxy(props, {
+			get(target: Record<string, unknown>, prop: string) {
+				const value = target[prop];
+				return value;
+			},
+			set(target: Record<string, unknown>, prop: string, value: unknown) {
+				removeEvents();
+				target[prop] = value;
+				addEvents();
 				return true;
 			},
 			deleteProperty() {
@@ -258,20 +279,6 @@ export class Block {
 			throw new Error(NO_ELEMENT);
 		}
 		return this._element;
-	}
-
-	public show(): void {
-		// const content = this.getContent();
-		// if (content) {
-		// 	content.style.display = 'block'; // неверно
-		// }
-	}
-
-	public hide(): void {
-		// const content = this.getContent();
-		// if (content) {
-		// 	content.style.display = 'none';
-		// }
 	}
 }
 

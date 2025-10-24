@@ -5,7 +5,6 @@ import {
 	type User,
 	type AvatarData,
 } from '../types.ts';
-import { handleApiJsonResponse, handleApiResponse } from '../error.ts';
 
 const http = new HTTPTransport('https://ya-praktikum.tech/api/user');
 
@@ -16,7 +15,7 @@ export const UserApi = {
 				data: JSON.stringify(data),
 				headers: { 'content-type': 'application/json' },
 			})
-			.then((data) => handleApiJsonResponse(data));
+			.then((response) => JSON.parse(response));
 	},
 
 	// data: new FormData(document.getById('avatar form')),
@@ -26,16 +25,14 @@ export const UserApi = {
 			.put('/profile/avatar', {
 				data,
 			})
-			.then((data) => handleApiJsonResponse(data));
+			.then((response) => JSON.parse(response));
 	},
 
 	changePassword: (data: PasswordData): Promise<void> => {
-		return http
-			.put('/password', {
-				data: JSON.stringify(data),
-				headers: { 'content-type': 'application/json' },
-			})
-			.then((data) => handleApiResponse(data));
+		return http.put('/password', {
+			data: JSON.stringify(data),
+			headers: { 'content-type': 'application/json' },
+		});
 	},
 
 	searchByLogin: (login: string): Promise<User[]> => {
@@ -44,6 +41,6 @@ export const UserApi = {
 				data: JSON.stringify({ login }),
 				headers: { 'content-type': 'application/json' },
 			})
-			.then((data) => handleApiJsonResponse(data));
+			.then((response) => JSON.parse(response));
 	},
 };

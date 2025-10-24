@@ -1,10 +1,8 @@
-// export function isEqual(a, b) {
-// 	return false;
-// }
-
 type PlainObject<T = unknown> = {
 	[k in string]: T;
 };
+
+type ArrayType = Array<unknown>;
 
 function isPlainObject(value: unknown): value is PlainObject {
 	return (
@@ -15,25 +13,25 @@ function isPlainObject(value: unknown): value is PlainObject {
 	);
 }
 
-function isArray(value: unknown): value is [] {
+function isArray(value: unknown): value is ArrayType {
 	return Array.isArray(value);
 }
 
-function isArrayOrObject(value: unknown): value is [] | PlainObject {
+function isArrayOrObject(value: unknown): value is ArrayType | PlainObject {
 	return isPlainObject(value) || isArray(value);
 }
 
-export function isEqual(lhs: PlainObject, rhs: PlainObject) {
-	// Сравнение количества ключей объектов и массивов
-	if (Object.keys(lhs).length !== Object.keys(rhs).length) {
+export function isEqual(
+	lhs: PlainObject | ArrayType,
+	rhs: PlainObject | ArrayType
+) {
+	if (!lhs || !rhs || Object.keys(lhs).length !== Object.keys(rhs).length) {
 		return false;
 	}
 
 	for (const [key, value] of Object.entries(lhs)) {
 		const rightValue = rhs[key];
 		if (isArrayOrObject(value) && isArrayOrObject(rightValue)) {
-			// Здесь value и rightValue может быть только массивом или объектом
-			// И TypeScript это обрабатывает
 			if (isEqual(value, rightValue)) {
 				continue;
 			}

@@ -22,5 +22,4 @@ document.addEventListener('DOMContentLoaded', () => {
 	const router = new Router('#app');
 	router.initPages(routingConfig);
 	router.start();
-	// check for loged in?
 });

@@ -1,5 +1,4 @@
 import { HTTPTransport } from './HTTPTransport';
-import { handleApiJsonResponse, handleApiResponse } from '../error.ts';
 import {
 	type GetChatsOptions,
 	type RawChat,
@@ -16,7 +15,7 @@ export const ChatApi = {
 	get: (options: GetChatsOptions): Promise<RawChat[]> => {
 		return http
 			.get('/', { data: options })
-			.then((data) => handleApiJsonResponse(data));
+			.then((response) => JSON.parse(response));
 	},
 
 	create: (title: string): Promise<ChatId> => {
@@ -25,7 +24,7 @@ export const ChatApi = {
 				data: JSON.stringify({ title }),
 				headers: { 'content-type': 'application/json' },
 			})
-			.then((data) => handleApiJsonResponse(data).id);
+			.then((response) => JSON.parse(response));
 	},
 
 	delete: (chatId: ChatId): Promise<RawDeleteResult> => {
@@ -34,7 +33,7 @@ export const ChatApi = {
 				data: JSON.stringify({ chatId }),
 				headers: { 'content-type': 'application/json' },
 			})
-			.then((data) => handleApiJsonResponse(data));
+			.then((response) => JSON.parse(response));
 	},
 
 	getUsers: ({
@@ -43,30 +42,26 @@ export const ChatApi = {
 	}: GetChatUsersOptions): Promise<RawChatUser[]> => {
 		return http
 			.get(`/${id}/users`, { data: options })
-			.then((data) => handleApiJsonResponse(data));
+			.then((response) => JSON.parse(response));
 	},
 
 	addUser: (data: ChatUsersData) => {
-		return http
-			.put(`/users`, {
-				data: JSON.stringify(data),
-				headers: { 'content-type': 'application/json' },
-			})
-			.then((data) => handleApiResponse(data));
+		return http.put(`/users`, {
+			data: JSON.stringify(data),
+			headers: { 'content-type': 'application/json' },
+		});
 	},
 
 	deleteUser: (data: ChatUsersData) => {
-		return http
-			.delete(`/users`, {
-				data: JSON.stringify(data),
-				headers: { 'content-type': 'application/json' },
-			})
-			.then((data) => handleApiResponse(data));
+		return http.delete(`/users`, {
+			data: JSON.stringify(data),
+			headers: { 'content-type': 'application/json' },
+		});
 	},
 
 	getToken: (id: number) => {
 		return http
 			.post(`/token/${id}`)
-			.then((data) => handleApiJsonResponse(data));
+			.then((response) => JSON.parse(response));
 	},
 };

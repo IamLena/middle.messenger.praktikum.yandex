@@ -38,6 +38,10 @@ export class Store extends EventBus {
 			delete res[key];
 		}, this.state);
 	}
+
+	public reset() {
+		this.state = {};
+	}
 }
 
 export const store = new Store();

@@ -1,4 +1,5 @@
 import { queryStringify } from '../tools/queryStringify';
+import { throwError } from './error';
 
 enum METHOD {
 	GET = 'GET',
@@ -102,6 +103,6 @@ export class HTTPTransport {
 					data as Document | XMLHttpRequestBodyInit | null | undefined
 				);
 			}
-		});
+		}).then((data) => throwError(data as XMLHttpRequest));
 	};
 }

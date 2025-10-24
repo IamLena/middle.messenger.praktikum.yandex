@@ -1,11 +1,12 @@
 import { ChatApi } from '../api/chat.ts';
-import { FatalError, UnauthorizedError } from '../error.ts';
+import { ErrorWithCode, handleError } from '../api/error.ts';
 import { Router } from '../framework/Router.ts';
 import { store } from '../store/Store.ts';
 import {
 	type GetChatsOptions,
 	type RawChat,
 	type ChatId,
+	type Chat,
 	type GetChatUsersOptions,
 	type RawChatUser,
 	type ChatUsersData,
@@ -15,21 +16,20 @@ export const chatController = {
 	async setCurrentUserChatsToStore(options: GetChatsOptions = {}) {
 		try {
 			const chats: RawChat[] = await ChatApi.get(options);
-			const result = chats.reduce((res, chat) => {
-				res[chat.id] = chat;
-				return res;
-			}, {});
-			store.set(`chats`, result);
+			const result = chats.reduce(
+				(res: Record<ChatId, RawChat>, chat) => {
+					res[chat.id] = chat;
+					return res;
+				},
+				{}
+			);
+			store.set('chats', result);
 		} catch (error) {
-			const router = new Router();
-			if (error instanceof FatalError) {
-				router.go('/fatal');
-			} else if (error instanceof UnauthorizedError) {
-				store.invalidate('chats');
-				// invalidate all store??
-				router.go('/');
+			if (error instanceof ErrorWithCode) {
+				handleError(error);
 			} else {
-				//alert(`${error} ${(error as Error).cause}`);
+				const router = new Router();
+				console.log(error); // router.go('/fatal');
 			}
 		}
 	},
@@ -39,15 +39,11 @@ export const chatController = {
 			await ChatApi.create(title);
 			await chatController.setCurrentUserChatsToStore({ title });
 		} catch (error) {
-			const router = new Router();
-			if (error instanceof FatalError) {
-				router.go('/fatal');
-			} else if (error instanceof UnauthorizedError) {
-				store.invalidate('chats');
-				// invalidate all store??
-				router.go('/');
+			if (error instanceof ErrorWithCode) {
+				handleError(error);
 			} else {
-				//alert(`${error} ${(error as Error).cause}`);
+				const router = new Router();
+				console.log(error); // router.go('/fatal');
 			}
 		}
 	},
@@ -57,15 +53,11 @@ export const chatController = {
 			await ChatApi.delete(chatId);
 			store.invalidate(`chats.${chatId}`);
 		} catch (error) {
-			const router = new Router();
-			if (error instanceof FatalError) {
-				router.go('/fatal');
-			} else if (error instanceof UnauthorizedError) {
-				store.invalidate('chats');
-				// invalidate all store??
-				router.go('/');
+			if (error instanceof ErrorWithCode) {
+				handleError(error);
 			} else {
-				//alert(`${error} ${(error as Error).cause}`);
+				const router = new Router();
+				console.log(error); // router.go('/fatal');
 			}
 		}
 	},
@@ -79,22 +71,12 @@ export const chatController = {
 					`${user.first_name} ${user.second_name}`
 			).join(', ');
 			store.set(`participants.${options.id}`, userNames);
-			// forEach - error
-			// RawChatUsers.forEach((rawUser) => {
-			// 	const { role, ...user } = rawUser;
-			// 	store.set(`users.${user.id}`, user);
-			// 	// store.set(`chats.${options.id}.users.${user.id}`, role);
-			// });
 		} catch (error) {
-			const router = new Router();
-			if (error instanceof FatalError) {
-				router.go('/fatal');
-			} else if (error instanceof UnauthorizedError) {
-				store.invalidate('chats');
-				// invalidate all store??
-				router.go('/');
+			if (error instanceof ErrorWithCode) {
+				handleError(error);
 			} else {
-				//alert(`${error} ${(error as Error).cause}`);
+				const router = new Router();
+				console.log(error); // router.go('/fatal');
 			}
 		}
 	},
@@ -104,15 +86,11 @@ export const chatController = {
 			await ChatApi.addUser(data);
 			await chatController.getUsers({ id: data.chatId });
 		} catch (error) {
-			const router = new Router();
-			if (error instanceof FatalError) {
-				router.go('/fatal');
-			} else if (error instanceof UnauthorizedError) {
-				store.invalidate('chats');
-				// invalidate all store??
-				router.go('/');
+			if (error instanceof ErrorWithCode) {
+				handleError(error);
 			} else {
-				//alert(`${error} ${(error as Error).cause}`);
+				const router = new Router();
+				console.log(error); // router.go('/fatal');
 			}
 		}
 	},
@@ -122,21 +100,26 @@ export const chatController = {
 			await ChatApi.deleteUser(data);
 			await chatController.getUsers({ id: data.chatId });
 		} catch (error) {
-			const router = new Router();
-			if (error instanceof FatalError) {
-				router.go('/fatal');
-			} else if (error instanceof UnauthorizedError) {
-				store.invalidate('chats');
-				// invalidate all store??
-				router.go('/');
+			if (error instanceof ErrorWithCode) {
+				handleError(error);
 			} else {
-				//alert(`${error} ${(error as Error).cause}`);
+				const router = new Router();
+				console.log(error); // router.go('/fatal');
 			}
 		}
 	},
 
 	async getToken(chatId: number) {
-		const { token } = await ChatApi.getToken(chatId);
-		store.set(`tokens.${chatId}`, token);
+		try {
+			const { token } = await ChatApi.getToken(chatId);
+			store.set(`tokens.${chatId}`, token);
+		} catch (error) {
+			if (error instanceof ErrorWithCode) {
+				handleError(error);
+			} else {
+				const router = new Router();
+				console.log(error); // router.go('/fatal');
+			}
+		}
 	},
 };
