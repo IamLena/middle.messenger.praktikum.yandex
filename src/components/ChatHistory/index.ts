@@ -58,18 +58,17 @@ export class ChatHistoryBase extends Block {
 
 			// this.userId
 
-			console.log(
-				'this.userId, this.chatId, this.token',
-				this.userId,
-				this.chatId,
-				this.token
-			);
+			// console.log(
+			// 	'this.userId, this.chatId, this.token',
+			// 	this.userId,
+			// 	this.chatId,
+			// 	this.token
+			// );
 			if (this.userId && this.chatId && this.token) {
 				// не тут, должен быть открытый, а он удаляется
 				// кажется надо передать куки, не валидный токен сейчас
-				const socket = new Socket(this.userId, this.chatId, this.token);
-				console.log('new socket here', socket);
-
+				// const socket = new Socket(this.userId, this.chatId, this.token);
+				// console.log('new socket here', socket);
 				// not ready yet
 				// const result = socket.getOld(0);
 				// console.log('get old messages', result);

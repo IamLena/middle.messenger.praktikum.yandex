@@ -14,6 +14,7 @@ import {
 
 export const chatController = {
 	async setCurrentUserChatsToStore(options: GetChatsOptions = {}) {
+		console.log('setCurrentUserChatsToStore');
 		try {
 			const chats: RawChat[] = await ChatApi.get(options);
 			const result = chats.reduce(
@@ -23,6 +24,10 @@ export const chatController = {
 				},
 				{}
 			);
+
+			const chatIds = Object.keys(result).join(',');
+			console.log('chatIds', chatIds);
+			store.set('chatIds', chatIds);
 			store.set('chats', result);
 		} catch (error) {
 			if (error instanceof ErrorWithCode) {
@@ -37,7 +42,7 @@ export const chatController = {
 	async createChat({ title }: { title: string }) {
 		try {
 			await ChatApi.create(title);
-			await chatController.setCurrentUserChatsToStore({ title });
+			await chatController.setCurrentUserChatsToStore();
 		} catch (error) {
 			if (error instanceof ErrorWithCode) {
 				handleError(error);
@@ -52,6 +57,10 @@ export const chatController = {
 		try {
 			await ChatApi.delete(chatId);
 			store.invalidate(`chats.${chatId}`);
+			await chatController.setCurrentUserChatsToStore();
+			if (store.getState().selectedChatId === chatId) {
+				store.set('selectedChatId', undefined);
+			}
 		} catch (error) {
 			if (error instanceof ErrorWithCode) {
 				handleError(error);
@@ -68,7 +77,7 @@ export const chatController = {
 			const userNames = RawChatUsers.map(
 				(user) =>
 					user.display_name ||
-					`${user.first_name} ${user.second_name}`
+					`${user.first_name} ${user.second_name} (${user.login})`
 			).join(', ');
 			store.set(`participants.${options.id}`, userNames);
 		} catch (error) {

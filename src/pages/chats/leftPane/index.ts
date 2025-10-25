@@ -42,20 +42,26 @@ export class LeftPaneBase extends Block {
 		newProps: { [x: string]: unknown }
 	): boolean {
 		if ('chatIds' in newProps && oldProps.chatIds !== newProps.chatIds) {
-			this.updateLists({
-				chats: mapIdsToChatBlocks(newProps.chatIds, (id) => {
-					this.selectChat(id);
-				}),
+			console.log('update chatIds', newProps.chatIds);
+			const chats = mapIdsToChatBlocks(newProps.chatIds, (id) => {
+				this.selectChat(id);
 			});
+			console.log('chats', chats);
+			this.updateLists({
+				chats,
+			});
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	override render() {
 		return `
 			<div class="${css.left}">
 				{{{header}}}
-				{{{ chats }}}
+				<div class="${css.scroll}">
+					{{{ chats }}}
+				</div>
 			</div>
 		`;
 	}
@@ -64,8 +70,18 @@ export class LeftPaneBase extends Block {
 export const LeftPane = connect(
 	() => ({ chatIds: Object.keys(ChatListModel()).join(',') }),
 	(state) => {
-		const chatIds = Object.keys(state.chats).join(',');
-		return { chatIds };
+		// error in deleting the last one
+		console.log('update', store);
+		const chatIds = state.chatIds; //Object.keys(state.chats).join(',');
+		const chats = state.chats;
+		if (chats && chatIds !== undefined) {
+			const allExist = chatIds
+				.split(',')
+				.every((chatId) => Boolean(chats[chatId]));
+			if (allExist) {
+				return { chatIds };
+			}
+		}
 	},
 	LeftPaneBase
 );

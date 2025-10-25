@@ -144,7 +144,6 @@ export class ProfilePage extends Block {
 		});
 		AuthApi.getCurrentUser()
 			.then((user) => {
-				console.log('user from api', user);
 				store.set('currentUser', user);
 			})
 			.catch((error) => {
@@ -229,14 +228,12 @@ export class ProfilePage extends Block {
 	}
 
 	submitAvatar(data) {
-		console.log('submitAvatar', data);
 		if (this.editAvatarMode) {
 		}
 		this.toggleEditAvatarMode();
 	}
 
 	submit(data) {
-		console.log('data', data);
 		if (this.editInfoMode) {
 			userController.changeProfileInfo(data);
 		}
@@ -244,7 +241,6 @@ export class ProfilePage extends Block {
 	}
 
 	submitPassword(data) {
-		console.log('submitPassword');
 		UserApi.changePassword(data);
 		this.toggleEditPasswordMode();
 	}
@@ -263,7 +259,6 @@ export class ProfilePage extends Block {
 				: 'edit profile information',
 		});
 		this.avatarForm.lists.inputs.forEach((input) => {
-			console.log('input', input);
 			input.children.input.updateProps({
 				disabled: !this.editAvatarMode,
 			});
@@ -277,7 +272,6 @@ export class ProfilePage extends Block {
 			text: this.editInfoMode ? 'save' : 'edit',
 		});
 		this.profileInfoForm.lists.inputs.forEach((input) => {
-			console.log('input', input);
 			input.children.input.updateProps({ disabled: !this.editInfoMode });
 		});
 		this.updateProps({ editInfoMode: this.editInfoMode });

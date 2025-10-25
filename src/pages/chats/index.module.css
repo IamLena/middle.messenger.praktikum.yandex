@@ -27,6 +27,8 @@
 	flex-direction: column;
 	gap: 6px;
 
+	height: 200px;
+
 	button {
 		background-color: antiquewhite;
 		width: fit-content;
@@ -41,4 +43,9 @@
 		padding: 4px;
 		align-items: flex-end;
 	}
+}
+
+.scroll {
+	overflow-y: scroll;
+	max-height: calc(100% - 170px);
 }

@@ -34,6 +34,8 @@ const deleteSelectedChatBtn = connect(
 
 export class ChatSettingsBase extends Block {
 	isInited: boolean;
+	chatId: number;
+
 	constructor({ chatId, title, participants }) {
 		super({
 			title,
@@ -41,6 +43,7 @@ export class ChatSettingsBase extends Block {
 			// id inside is not set after selection, need connection
 			deleteBtn: new deleteSelectedChatBtn({
 				text: 'delete chat',
+				onClick: () => this.deleteChat(),
 			}),
 			addParticipant: new Form({
 				inputData: [
@@ -77,26 +80,36 @@ export class ChatSettingsBase extends Block {
 		});
 
 		this.isInited = Boolean(chatId);
+		this.chatId = chatId;
 	}
 
 	protected override componentDidUpdate(
 		oldProps: { [x: string]: unknown },
 		newProps: { [x: string]: unknown }
 	): boolean {
+		console.log('oldProps', oldProps, 'newProps', newProps);
 		if (
 			'chatId' in newProps &&
 			Boolean(newProps.chatId) &&
 			!oldProps.chatId
 		) {
 			this.isInited = true;
+			this.chatId = newProps.chatId;
 			return true;
 		}
 		if (
 			('title' in newProps || 'participants' in newProps) &&
 			!isEqual(newProps, oldProps)
 		) {
+			this.chatId = newProps.chatId;
+			this.isInited = Boolean(newProps.chatId);
 			return true;
 		}
+	}
+
+	deleteChat() {
+		console.log('chat to delete', this.chatId);
+		chatController.deleteChat(this.chatId);
 	}
 
 	selectChat(id: number) {
@@ -104,14 +117,19 @@ export class ChatSettingsBase extends Block {
 	}
 
 	override render() {
-		if (this.isInited) {
+		console.log('this.chatId', this.chatId);
+		if (this.chatId) {
 			return `
 				<div class="${css.header}">
-					{{{ title }}}
-					{{{ participants }}}
-					{{{ deleteBtn }}}
+					<div>
+						title: {{{ title }}}
+					</div>
+					<div>
+						participants: {{{ participants }}}
+					</div>
 					{{{ addParticipant }}}
 					{{{ deleteParticipant }}}
+					{{{ deleteBtn }}}
 				</div>
 			`;
 		}

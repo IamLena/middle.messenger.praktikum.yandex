@@ -39,7 +39,7 @@ export class LeftPaneHeader extends Block {
 					},
 				],
 				btnProps: { text: 'search' },
-				submit: chatController.search,
+				submit: (data) => this.search(data),
 				class: css.form,
 			}),
 		});
@@ -47,6 +47,11 @@ export class LeftPaneHeader extends Block {
 
 	selectChat(id: number) {
 		store.set('selectedChatId', id);
+	}
+
+	search(data) {
+		console.log(data);
+		chatController.setCurrentUserChatsToStore(data);
 	}
 
 	override render() {
