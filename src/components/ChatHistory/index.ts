@@ -23,35 +23,51 @@ export class ChatHistory extends Block {
 
 		authController.setCurrentUserToStore();
 
-		// store.on(StoreEvents.Updated, () => {
-		// 	const chatId = store.getState().selectedChatId;
-		// 	if (!chatId) return;
-		// 	const userId = store.getState().currentUser?.id;
-		// 	if (!userId) return;
-		// 	const token = store.getState().tokens?.[chatId];
-		// 	if (!token) {
-		// 		chatController.getToken(chatId);
-		// 		return;
-		// 	}
-		// 	if (this.socket && this.chatId !== chatId) {
-		// 		this.socket.stopPinging();
-		// 	}
-		// 	if (!this.socket) {
-		// 		this.socket = new Socket(userId, chatId, token);
-		// 	}
-		// 	this.socket.getOld()
-		// 	// messagesController.getOld(this.socket);
-		// 	// connect
-		// 	// get messages
-		// });
+		store.on(StoreEvents.Updated, () => {
+			const chatId = store.getState().selectedChatId;
+			if (!chatId) return;
+			const userId = store.getState().currentUser?.id;
+			if (!userId) return;
+			const token = store.getState().tokens?.[chatId];
+			if (!token) {
+				chatController.getToken(chatId);
+				return;
+			}
+			if (this.socket && this.chatId !== chatId) {
+				this.socket.stopPinging();
+			}
+			if (!this.socket) {
+				this.socket = new Socket(userId, chatId, token);
+			}
+			this.chatId = chatId;
+			this.userId = userId;
+			const messages = store.getState().messages?.[this.chatId];
+			console.log('messages', messages);
+			if (messages) {
+				const messagesList = messages.map(
+					(message) =>
+						new Message({
+							text: message.content,
+							mine: message.user_id === this.userId,
+						})
+				);
+				this.isReady = true;
+				this.updateLists({
+					messages: messagesList,
+				});
+			}
+		});
 	}
 
 	override render(): string {
+		console.log(' this.isReady', this.isReady);
 		return this.isReady
 			? `
-			<div>{{{messages}}}</div>
-		`
-			: '<div></div>';
+				<div class="${css.container} {{class}}">
+					{{{messages}}}
+				</div>
+			`
+			: `<div class="${css.container} {{class}}"></div>`;
 	}
 }
 

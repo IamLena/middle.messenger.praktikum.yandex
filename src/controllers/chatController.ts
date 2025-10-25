@@ -110,9 +110,10 @@ export const chatController = {
 		await userController.searchByLogin(login);
 		console.log('store.getState()', store.getState());
 		const userIds = store.getState().usersByLogin[login];
-		if (userIds && chatId) {
+		const certainUser = store.getState().certainUser[login];
+		if ((certainUser || userIds) && chatId) {
 			chatController.addUser({
-				users: userIds,
+				users: certainUser ? [certainUser.id] : userIds,
 				chatId,
 			});
 		}

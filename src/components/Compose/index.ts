@@ -3,9 +3,11 @@ import { messageValidation } from '../../validation';
 import { Button } from '../Button';
 import { InputLine } from '..';
 import css from './index.module.css';
+import { store, StoreEvents } from '../../store/Store';
 
 export type Props = {
 	class?: string;
+	sendMessage: (text: string) => void;
 };
 
 export class Compose extends Block {
@@ -18,7 +20,7 @@ export class Compose extends Block {
 			onClick: (event) => {
 				event.preventDefault();
 				event.stopPropagation();
-				this.send();
+				// props.sendMessage('text');
 			},
 			class: css.button,
 		});
@@ -42,10 +44,6 @@ export class Compose extends Block {
 
 	validate() {
 		return this.input.validate();
-	}
-
-	send() {
-		const data = this.validate();
 	}
 
 	override render() {

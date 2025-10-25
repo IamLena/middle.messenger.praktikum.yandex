@@ -1,3 +1,5 @@
+import { store } from '../store/Store.ts';
+
 export class Socket {
 	socket: WebSocket;
 	intervalId: number;
@@ -67,8 +69,30 @@ export class Socket {
 		);
 	}
 
-	getMessage(data) {
-		if (JSON.parse(data).type !== 'pong') {
+	getMessage(jsonData) {
+		const data = JSON.parse(jsonData);
+		if (Array.isArray(data)) {
+			console.log('messages', data);
+			const chatId = data[0].chat_id;
+			store.set(`messages.${chatId}`, data);
+			console.log('getMessage store', store);
+			// {
+			//     chat_id: "number",
+			//     time: "string",
+			//     type: "string",
+			//     user_id: "string",
+			//     content: "string",
+			//     file?: {
+			//         id: "number",
+			//         user_id: "number",
+			//         path: "string",
+			//         filename: "string",
+			//         content_type: "string",
+			//         content_size: "number",
+			//         upload_date: "string",
+			//     }
+			// }
+		} else if (data.type !== 'pong') {
 			console.log('getMessage data', data);
 		}
 	}

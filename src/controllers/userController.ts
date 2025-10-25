@@ -57,12 +57,17 @@ export const userController = {
 			const rawUsers = await UserApi.searchByLogin(login);
 			const users: User[] = [];
 			const userIds: UserId[] = [];
+			let certainUser;
 			rawUsers.forEach((user) => {
 				users.push(user);
 				userIds.push(user.id);
+				if (user.login === login) {
+					certainUser = user;
+				}
 			});
 			store.set(`users`, users);
 			store.set(`usersByLogin.${login}`, userIds);
+			store.set(`certainUser.${login}`, certainUser);
 		} catch (error) {
 			if (error instanceof ErrorWithCode) {
 				handleError(error);

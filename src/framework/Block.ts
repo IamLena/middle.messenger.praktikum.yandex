@@ -69,8 +69,8 @@ export class Block {
 		>;
 		this.props = this._makePropsProxy({ ...props });
 
-		const events = this.props.events || {};
-		this.events = this._makeEventsProxy({ ...events }) as EventsToPass;
+		this.events = (this.props.events || {}) as EventsToPass;
+		// this.events = this._makeEventsProxy({ ...events }) as EventsToPass;
 		this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
 	}
 
@@ -133,25 +133,25 @@ export class Block {
 		});
 	}
 
-	private _makeEventsProxy(props: AnyProps) {
-		const removeEvents = this._removeEvents;
-		const addEvents = this._addEvents;
-		return new Proxy(props, {
-			get(target: Record<string, unknown>, prop: string) {
-				const value = target[prop];
-				return value;
-			},
-			set(target: Record<string, unknown>, prop: string, value: unknown) {
-				removeEvents();
-				target[prop] = value;
-				addEvents();
-				return true;
-			},
-			deleteProperty() {
-				throw new Error(NO_ACCESS('for deleting properties of Block'));
-			},
-		});
-	}
+	// private _makeEventsProxy(props: AnyProps) {
+	// 	const removeEvents = this._removeEvents;
+	// 	const addEvents = this._addEvents;
+	// 	return new Proxy(props, {
+	// 		get(target: Record<string, unknown>, prop: string) {
+	// 			const value = target[prop];
+	// 			return value;
+	// 		},
+	// 		set(target: Record<string, unknown>, prop: string, value: unknown) {
+	// 			removeEvents();
+	// 			target[prop] = value;
+	// 			addEvents();
+	// 			return true;
+	// 		},
+	// 		deleteProperty() {
+	// 			throw new Error(NO_ACCESS('for deleting properties of Block'));
+	// 		},
+	// 	});
+	// }
 
 	/**
 	 * тригерится событием изменения параметров
@@ -257,7 +257,7 @@ export class Block {
 	}
 
 	private _addEvents() {
-		if (!this._element) {
+		if (this.events && !this._element) {
 			throw new Error(NO_ELEMENT);
 		}
 		Object.keys(this.events).forEach((eventName) => {
