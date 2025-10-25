@@ -70,17 +70,18 @@ export class LeftPaneBase extends Block {
 export const LeftPane = connect(
 	() => ({ chatIds: Object.keys(ChatListModel()).join(',') }),
 	(state) => {
-		// error in deleting the last one
-		console.log('update', store);
-		const chatIds = state.chatIds; //Object.keys(state.chats).join(',');
-		const chats = state.chats;
-		if (chats && chatIds !== undefined) {
-			const allExist = chatIds
-				.split(',')
-				.every((chatId) => Boolean(chats[chatId]));
-			if (allExist) {
-				return { chatIds };
-			}
+		const chatIds = typeof state.chatIds === 'string' ? state.chatIds : '';
+		const chats = (state.chats ?? {}) as Record<string, unknown>;
+
+		if (chatIds === '') {
+			return { chatIds: '' };
+		}
+
+		const ids = chatIds.split(',').filter(Boolean);
+		const allExist = ids.every((chatId) => Boolean(chats[chatId]));
+
+		if (allExist) {
+			return { chatIds: ids.join(',') };
 		}
 	},
 	LeftPaneBase
