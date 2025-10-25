@@ -1,5 +1,6 @@
 export class Socket {
 	socket: WebSocket;
+	intervalId: number;
 
 	constructor(userId, chatId, token) {
 		// тут userId и chatId и токет достать
@@ -16,7 +17,7 @@ export class Socket {
 			// 		type: 'ping',
 			// 	})
 			// );
-			setInterval(() => {
+			this.intervalId = setInterval(() => {
 				this.ping();
 			}, 5000);
 
@@ -43,6 +44,10 @@ export class Socket {
 		});
 
 		this.socket = socket;
+	}
+
+	stopPinging() {
+		clearInterval(this.intervalId);
 	}
 
 	ping() {
