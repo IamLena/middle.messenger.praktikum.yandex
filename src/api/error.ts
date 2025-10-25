@@ -16,6 +16,9 @@ export function handleError(error: ErrorWithCode) {
 		case 401:
 			store.reset();
 			router.go('/');
+			return;
+		default:
+			alert(error.message);
 	}
 }
 

@@ -12,6 +12,13 @@ import {
 	displayNameValidation,
 } from '../../validation/index.ts';
 import { connect } from '../../store/connect.ts';
+import { Router } from '../../framework/Router.ts';
+import { store, StoreEvents } from '../../store/Store.ts';
+import { AuthApi } from '../../api/auth.ts';
+import { UserApi } from '../../api/user.ts';
+import { type User } from '../../types.ts';
+import { isEqual } from '../../tools/isEqual.ts';
+import { userController } from '../../controllers/userController.ts';
 
 // disabled for not editable
 // in form save/edit text for button
@@ -20,7 +27,7 @@ import { connect } from '../../store/connect.ts';
 // change avatar
 // change password
 
-function getInputData(user = {}) {
+function getAvatarInputData(user = {}, enabled) {
 	return [
 		{
 			id: 'avatar',
@@ -31,7 +38,14 @@ function getInputData(user = {}) {
 				value,
 				isValid: true,
 			}),
+			disabled: !enabled,
+			value: user.avatar,
 		},
+	];
+}
+
+function getInputData(user = {}, enabled) {
+	return [
 		{
 			id: 'first_name',
 			label: 'first name',
@@ -39,6 +53,7 @@ function getInputData(user = {}) {
 			name: 'first_name',
 			value: user.first_name,
 			validate: nameValidation,
+			disabled: !enabled,
 		},
 		{
 			id: 'second_name',
@@ -47,6 +62,7 @@ function getInputData(user = {}) {
 			name: 'second_name',
 			value: user.second_name,
 			validate: nameValidation,
+			disabled: !enabled,
 		},
 		{
 			id: 'display_name',
@@ -55,6 +71,7 @@ function getInputData(user = {}) {
 			name: 'display_name',
 			value: user.display_name,
 			validate: displayNameValidation,
+			disabled: !enabled,
 		},
 		{
 			id: 'email',
@@ -63,6 +80,7 @@ function getInputData(user = {}) {
 			name: 'email',
 			value: user.email,
 			validate: emailValidation,
+			disabled: !enabled,
 		},
 		{
 			id: 'phone',
@@ -71,6 +89,7 @@ function getInputData(user = {}) {
 			name: 'phone',
 			value: user.phone,
 			validate: phoneValidation,
+			disabled: !enabled,
 		},
 		{
 			id: 'login',
@@ -80,80 +99,230 @@ function getInputData(user = {}) {
 			value: user.login,
 			validate: loginValidation,
 			autocomplete: 'username',
+			disabled: !enabled,
 		},
-		// {
-		// 	id: 'oldPassword',
-		// 	label: 'old password',
-		// 	type: 'password',
-		// 	name: 'oldPassword',
-		// 	validate: passwordValidation,
-		// 	autocomplete: 'current-password',
-		// },
-		// {
-		// 	id: 'newPassword',
-		// 	label: 'new password',
-		// 	type: 'password',
-		// 	name: 'newPassword',
-		// 	validate: passwordValidation,
-		// 	autocomplete: 'new-password',
-		// },
 	];
 }
 
-const ProfileForm = connect(
-	(user) => ({ inputData: getInputData(user) }),
-	(state) => ({ inputData: getInputData(state.currentUser) }),
-	Form
-);
+function getPasswordInputData() {
+	return [
+		{
+			id: 'oldPassword',
+			label: 'old password',
+			type: 'password',
+			name: 'oldPassword',
+			validate: passwordValidation,
+			autocomplete: 'current-password',
+		},
+		{
+			id: 'newPassword',
+			label: 'new password',
+			type: 'password',
+			name: 'newPassword',
+			validate: passwordValidation,
+			autocomplete: 'new-password',
+		},
+	];
+}
 
-class ProfilePageBase extends Block {
-	editMode: boolean;
+export class ProfilePage extends Block {
+	isReady: boolean = false;
+	currentUser: User | {} = {};
+	editInfoMode: boolean = false;
+	editAvatarMode: boolean = false;
+	editPasswordMode: boolean = false;
+	avatarForm: Form | null = null;
+	profileInfoForm: Form | null = null;
+	passwordForm: Form | null = null;
 
-	constructor(user) {
-		const profileInfoForm = new ProfileForm(
-			{ user },
-			{
-				btnProps: {
-					text: 'edit',
-				},
-				submit: () => this.toggleEditMode(),
-			}
-		);
-
+	constructor() {
 		super({
-			profileInfoForm,
-			cancelEditButton: new Button({
-				text: 'cancel',
-				onClick: () => this.toggleEditMode(),
-			}),
-			logoutButton: new Button({
-				text: 'logout',
-				onClick: authController.logout,
-			}),
+			ready: false,
+			editInfoMode: false,
+			editAvatarMode: false,
+			editPasswordMode: false,
 		});
-		this.editMode = false;
+		AuthApi.getCurrentUser()
+			.then((user) => {
+				console.log('user from api', user);
+				store.set('currentUser', user);
+			})
+			.catch((error) => {
+				if (error.code === 401) {
+					const router = new Router();
+					store.reset();
+					router.go('/');
+				}
+			});
+
+		store.on(StoreEvents.Updated, () => {
+			const currentUser = store.getState().currentUser;
+			if (currentUser && !isEqual(this.currentUser, currentUser)) {
+				this.currentUser = currentUser;
+
+				// avatar form
+				const avatarForm = new Form({
+					inputData: getAvatarInputData(
+						currentUser,
+						this.editAvatarMode
+					),
+					btnProps: {
+						text: this.editAvatarMode
+							? 'save avatar'
+							: 'edit avatar',
+					},
+					submit: (data) => {
+						this.submitAvatar(data);
+					},
+				});
+				this.avatarForm = avatarForm;
+
+				// profile form
+				const inputData = getInputData(currentUser, this.editInfoMode);
+				const profileInfoForm = new Form({
+					inputData,
+					btnProps: {
+						text: this.editInfoMode
+							? 'save profile information'
+							: 'edit profile information',
+					},
+					submit: (data) => this.submit(data),
+				});
+				this.profileInfoForm = profileInfoForm;
+
+				//password form
+				const passwordForm = new Form({
+					inputData: getPasswordInputData(),
+					btnProps: {
+						text: 'save password',
+					},
+					submit: (data) => this.submitPassword(data),
+				});
+				this.passwordForm = passwordForm;
+
+				const changePasswordBtn = new Button({
+					text: 'change password',
+					onClick: () => {
+						this.toggleEditPasswordMode();
+					},
+				});
+
+				this.children = {
+					avatarForm,
+					profileInfoForm,
+					passwordForm,
+					changePasswordBtn,
+					cancelEditButton: new Button({
+						text: 'cancel',
+						onClick: () => this.cancelEdit(),
+					}),
+					logoutButton: new Button({
+						text: 'logout',
+						onClick: authController.logout,
+					}),
+				};
+
+				this.isReady = true;
+				this.updateProps({ ready: true });
+			}
+		});
 	}
 
-	toggleEditMode() {
-		this.editMode = !this.editMode;
+	submitAvatar(data) {
+		console.log('submitAvatar', data);
+		if (this.editAvatarMode) {
+		}
+		this.toggleEditAvatarMode();
+	}
+
+	submit(data) {
+		console.log('data', data);
+		if (this.editInfoMode) {
+			userController.changeProfileInfo(data);
+		}
+		this.toggleEditInfoMode();
+	}
+
+	submitPassword(data) {
+		console.log('submitPassword');
+		UserApi.changePassword(data);
+		this.toggleEditPasswordMode();
+	}
+
+	toggleEditPasswordMode() {
+		this.editPasswordMode = !this.editPasswordMode;
+		this.passwordForm.props.inputData = getPasswordInputData();
+		this.updateProps({ editPasswordMode: this.editPasswordMode });
+	}
+
+	toggleEditAvatarMode() {
+		this.editAvatarMode = !this.editAvatarMode;
+		this.avatarForm.children.button.updateProps({
+			text: this.editAvatarMode
+				? 'save profile information'
+				: 'edit profile information',
+		});
+		this.avatarForm.lists.inputs.forEach((input) => {
+			console.log('input', input);
+			input.children.input.updateProps({
+				disabled: !this.editAvatarMode,
+			});
+		});
+		this.updateProps({ editAvatarMode: this.editAvatarMode });
+	}
+
+	toggleEditInfoMode() {
+		this.editInfoMode = !this.editInfoMode;
+		this.profileInfoForm.children.button.updateProps({
+			text: this.editInfoMode ? 'save' : 'edit',
+		});
+		this.profileInfoForm.lists.inputs.forEach((input) => {
+			console.log('input', input);
+			input.children.input.updateProps({ disabled: !this.editInfoMode });
+		});
+		this.updateProps({ editInfoMode: this.editInfoMode });
+	}
+
+	cancelEdit() {
+		if (this.editAvatarMode) {
+			this.avatarForm.props.inputData = getAvatarInputData(
+				this.currentUser,
+				false
+			);
+			this.toggleEditAvatarMode();
+		}
+		if (this.editInfoMode) {
+			this.profileInfoForm.props.inputData = getInputData(
+				this.currentUser,
+				false
+			);
+			this.toggleEditInfoMode();
+		}
+		if (this.editPasswordMode) {
+			this.toggleEditPasswordMode();
+		}
 	}
 
 	override render() {
-		return `
-			<div class="${css.container}">
-				{{{ profileInfoForm }}}
-				{{#if this.editMode}}
-					{{{ cancelEditButton }}}
-				{{else}}
-					{{{ logoutButton }}}
-				{{/if}}
-			</div>
-		`;
+		const editMode =
+			this.editAvatarMode || this.editInfoMode || this.editPasswordMode;
+		return this.isReady
+			? `
+				<div class="${css.container}">
+					{{{ avatarForm }}}
+					{{{ profileInfoForm }}}
+					 {{#if editPasswordMode}}
+					 {{{passwordForm}}}
+					 {{else}}
+						{{{changePasswordBtn}}}
+					{{/if}}
+					{{#if ${editMode} }}
+						{{{ cancelEditButton }}}
+					{{else}}
+						{{{ logoutButton }}}
+					{{/if}}
+				</div>
+			`
+			: '<div></div>';
 	}
 }
-
-export const ProfilePage = connect(
-	CurrentUserModel,
-	(state) => state.currentUser,
-	ProfilePageBase
-);

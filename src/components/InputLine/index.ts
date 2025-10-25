@@ -52,8 +52,9 @@ export class InputLine extends Block {
 				type="{{type}}"
 				id="{{id}}"
 				name="{{name}}"
-				value="{{value}}"
+				{{#if value}}value="{{value}}"{{/if}}
 				${this.props.autocomplete ? 'autocomplete="{{autocomplete}}"' : ''}
+				{{#if disabled}}disabled{{/if}}
 			>
 		`;
 	}

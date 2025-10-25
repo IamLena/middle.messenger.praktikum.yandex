@@ -6,7 +6,7 @@ import {
 	type AvatarData,
 } from '../types.ts';
 
-const http = new HTTPTransport('https://ya-praktikum.tech/api/user');
+const http = new HTTPTransport('https://ya-praktikum.tech/api/v2/user');
 
 export const UserApi = {
 	changeProfileInfo: (data: ProfileInfo): Promise<User> => {
