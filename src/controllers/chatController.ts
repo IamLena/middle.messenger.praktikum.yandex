@@ -11,6 +11,7 @@ import {
 	type RawChatUser,
 	type ChatUsersData,
 } from '../types.ts';
+import { userController } from './userController.ts';
 
 export const chatController = {
 	async setCurrentUserChatsToStore(options: GetChatsOptions = {}) {
@@ -104,6 +105,19 @@ export const chatController = {
 		}
 	},
 
+	async addUserByLogin({ login, chatId }) {
+		console.log('login, chatId', login, chatId);
+		await userController.searchByLogin(login);
+		console.log('store.getState()', store.getState());
+		const userIds = store.getState().usersByLogin[login];
+		if (userIds && chatId) {
+			chatController.addUser({
+				users: userIds,
+				chatId,
+			});
+		}
+	},
+
 	async deleteUser(data: ChatUsersData) {
 		try {
 			await ChatApi.deleteUser(data);
@@ -115,6 +129,19 @@ export const chatController = {
 				const router = new Router();
 				console.log(error); // router.go('/fatal');
 			}
+		}
+	},
+
+	async deleteUserByLogin({ login, chatId }) {
+		console.log('login, chatId', login, chatId);
+		await userController.searchByLogin(login);
+		console.log('store.getState()', store.getState());
+		const userIds = store.getState().usersByLogin[login];
+		if (userIds && chatId) {
+			chatController.deleteUser({
+				users: userIds,
+				chatId,
+			});
 		}
 	},
 

@@ -27,7 +27,7 @@
 	flex-direction: column;
 	gap: 6px;
 
-	height: 200px;
+	height: 250px;
 
 	button {
 		background-color: antiquewhite;
@@ -47,5 +47,5 @@
 
 .scroll {
 	overflow-y: scroll;
-	max-height: calc(100% - 170px);
+	max-height: calc(100% - 250px);
 }

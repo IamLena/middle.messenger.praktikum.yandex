@@ -56,11 +56,7 @@ export class ChatSettingsBase extends Block {
 					},
 				],
 				btnProps: { text: 'add participant' },
-				submit: ({ participant }) =>
-					chatController.addParticipant({
-						login: participant,
-						chatId,
-					}),
+				submit: (data) => this.addParticipant(data),
 				class: css.form,
 			}),
 			deleteParticipant: new Form({
@@ -73,8 +69,8 @@ export class ChatSettingsBase extends Block {
 						validate: okayValidation,
 					},
 				],
-				btnProps: { text: 'add participant' },
-				submit: chatController.deleteParticipant,
+				btnProps: { text: 'remove participant' },
+				submit: (data) => this.deleteParticipant(data),
 				class: css.form,
 			}),
 		});
@@ -110,6 +106,20 @@ export class ChatSettingsBase extends Block {
 	deleteChat() {
 		console.log('chat to delete', this.chatId);
 		chatController.deleteChat(this.chatId);
+	}
+
+	addParticipant({ participant }) {
+		chatController.addUserByLogin({
+			login: participant,
+			chatId: this.chatId,
+		});
+	}
+
+	deleteParticipant({ participant }) {
+		chatController.deleteUserByLogin({
+			login: participant,
+			chatId: this.chatId,
+		});
 	}
 
 	selectChat(id: number) {
