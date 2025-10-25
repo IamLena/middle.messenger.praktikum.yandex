@@ -92,6 +92,9 @@ export class Socket {
 			//         upload_date: "string",
 			//     }
 			// }
+		} else if (data.type === 'message') {
+			const chatId = store.getState().selectedChatId;
+			store.set(`messages.${chatId}`, [data]);
 		} else if (data.type !== 'pong') {
 			console.log('getMessage data', data);
 		}

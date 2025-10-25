@@ -4,7 +4,7 @@
 	height: calc(100% - var(--compose-height) - 270px);
 	background-color: aliceblue;
 	display: flex;
-	flex-direction: column;
+	flex-direction: column-reverse;
 	gap: 20px;
 	padding: 10px;
 }

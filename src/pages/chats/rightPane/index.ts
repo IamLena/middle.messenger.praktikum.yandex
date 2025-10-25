@@ -17,7 +17,9 @@ export class RightPane extends Block {
 		super({
 			chatSettings: new ChatSettings({}),
 			chatHistory: new ChatHistory({}),
-			compose: new Compose({}),
+			compose: new Compose({
+				sendMessage: (data) => this.sendMessage(data),
+			}),
 		});
 
 		authController.setCurrentUserToStore();
@@ -43,6 +45,13 @@ export class RightPane extends Block {
 			this.chatId = chatId;
 			this.userId = userId;
 		});
+	}
+
+	sendMessage(text) {
+		if (this.socket) {
+			console.log('sendMessage in right pane', text);
+			this.socket.sendMessage(text);
+		}
 	}
 
 	override render() {

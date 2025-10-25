@@ -20,7 +20,7 @@ export class Compose extends Block {
 			onClick: (event) => {
 				event.preventDefault();
 				event.stopPropagation();
-				// props.sendMessage('text');
+				props.sendMessage('message from petya');
 			},
 			class: css.button,
 		});
