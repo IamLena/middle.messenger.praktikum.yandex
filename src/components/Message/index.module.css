@@ -11,3 +11,9 @@
 		align-self: flex-end;
 	}
 }
+
+.time {
+	text-align: end;
+	font-size: 12px;
+	color: grey;
+}
