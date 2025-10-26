@@ -1,7 +1,7 @@
 import { Block } from '../../framework/Block';
 import css from './index.module.css';
-import { LeftPane } from './leftPane';
-import { RightPane } from './rightPane';
+import { LeftPane } from './leftPane/index.ts';
+import { RightPane } from './rightPane/index.ts';
 
 export class ChatsPage extends Block {
 	constructor() {

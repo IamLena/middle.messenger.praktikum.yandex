@@ -1,3 +1,4 @@
+import { resourceController } from '../../controllers/resourceController';
 import { Block } from '../../framework/Block';
 import css from './index.module.css';
 
@@ -7,14 +8,20 @@ export type Props = {
 };
 
 export class Avatar extends Block {
-	constructor(props: Props) {
-		super(props);
+	constructor({ src, ...props }: Props) {
+		super({
+			src: src ? resourceController.getSrc(src) : undefined,
+			...props,
+		});
 	}
 
 	override render() {
-		if (this.props.src) {
-			return `<img alt="avatar" class="${css.avatar} {{class}}" src="{{src}}"/>`;
-		}
-		return `<div class="${css.avatar} {{class}}"/>`;
+		return `
+			{{#if src}}
+				<img alt="avatar" class="${css.avatar} {{class}}" src="{{src}}"/>
+			{{else}}
+				<div class="${css.avatar} {{class}}"/>
+			{{/if}}
+		`;
 	}
 }

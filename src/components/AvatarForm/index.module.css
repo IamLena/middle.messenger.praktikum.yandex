@@ -1,0 +1,23 @@
+.form {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+
+	& h1 {
+		display: inline-block;
+		margin: 10px auto;
+	}
+
+	& input {
+		width: 200px;
+	}
+}
+
+.file {
+	display: none;
+}
+
+.avatar {
+	max-width: 200px;
+	border-radius: 8px;
+}

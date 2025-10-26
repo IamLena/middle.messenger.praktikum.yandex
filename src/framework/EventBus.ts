@@ -1,5 +1,3 @@
-import { NO_HANDLER_ERROR } from '../errorConsts';
-
 export type Handler = (...args: unknown[]) => void;
 export type EventName = string;
 export type EventsToPass = Record<string, Handler>;
@@ -23,7 +21,7 @@ export class EventBus {
 	// remove certain handler
 	off(event: EventName, callback: Handler) {
 		if (!this.listeners[event]) {
-			throw new Error(NO_HANDLER_ERROR(event));
+			return;
 		}
 
 		this.listeners[event] = this.listeners[event].filter(
@@ -34,7 +32,7 @@ export class EventBus {
 	// emit an event = call all the handlers registered for it
 	emit(event: EventName, ...args: unknown[]) {
 		if (!this.listeners[event]) {
-			throw new Error(NO_HANDLER_ERROR(event));
+			return;
 		}
 
 		this.listeners[event].forEach(function (listener) {

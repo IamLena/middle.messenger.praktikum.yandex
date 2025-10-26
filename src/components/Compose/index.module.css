@@ -2,19 +2,22 @@
 
 .compose {
 	height: var(--compose-height);
-	width: 100%;
-	display: flex;
 	align-items: center;
 	padding: 10px;
+	display: flex;
+	flex-direction: row;
+
+	& > div {
+		flex: 1;
+	}
+
+	& input {
+		width: 100%;
+	}
 }
 
 .button {
 	width: 60px;
 	display: inline-block;
 	margin: 10px;
-}
-
-.input {
-	width: calc(100% - 100px);
-	display: inline-block;
 }
