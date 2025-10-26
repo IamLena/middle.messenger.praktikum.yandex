@@ -5,3 +5,8 @@
 
 [build.environment]
   NPM_CONFIG_USERCONFIG = "./.npmrc"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
