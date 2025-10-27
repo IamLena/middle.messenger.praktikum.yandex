@@ -1,4 +1,5 @@
 import { store } from '../store/Store.ts';
+import { parseResponse } from './error.ts';
 import type { AppState, StoredMessage } from '../store/types';
 
 type RawHistoryMessage = {
@@ -73,9 +74,9 @@ export class Socket {
 	}
 
 	getMessage(jsonData: string) {
-		const parsed = JSON.parse(jsonData) as
-			| RawHistoryMessage[]
-			| RawRealtimeMessage;
+		const parsed = parseResponse<RawHistoryMessage[] | RawRealtimeMessage>(
+			jsonData
+		);
 		if (Array.isArray(parsed)) {
 			if (parsed.length === 0) {
 				return;

@@ -1,5 +1,5 @@
 import { Block } from '../../../framework/Block.ts';
-import { Form, Button, AvatarForm, type ButtonProps } from '../../../components';
+import { Form, Button, AvatarForm } from '../../../components';
 import css from '../index.module.css';
 import { store } from '../../../store/Store.ts';
 import { okayValidation } from '../../../validation';
@@ -16,32 +16,16 @@ type ChatSettingsProps = {
 	avatarPath?: string;
 };
 
-const DeleteSelectedChatButton = connect<ButtonProps>(
-	() => {
-		const state = store.getState<AppState>();
-		const chatId = state.selectedChatId;
-		if (chatId) {
-			return {
-				onClick: () => chatController.deleteChat(chatId),
-			};
-		}
-	},
-	(state) => {
-		const chatId = state.selectedChatId;
-		if (chatId) {
-			return {
-				onClick: () => chatController.deleteChat(chatId),
-			};
-		}
-	},
-	Button
-);
-
 export class ChatSettingsBase extends Block {
 	private chatId?: ChatId;
 	private readonly avatarForm: AvatarForm;
 
-	constructor({ chatId, title, participants, avatarPath }: ChatSettingsProps) {
+	constructor({
+		chatId,
+		title,
+		participants,
+		avatarPath,
+	}: ChatSettingsProps) {
 		const avatarForm = new AvatarForm({
 			value: avatarPath,
 			updateMethod: (data) => this.changeAvatar(data),
@@ -51,8 +35,9 @@ export class ChatSettingsBase extends Block {
 			avatarPath,
 			title,
 			participants,
-			deleteBtn: new DeleteSelectedChatButton({
+			deleteBtn: new Button({
 				text: 'delete chat',
+				onClick: () => this.deleteChat(),
 			}),
 			addParticipant: new Form({
 				inputData: [
@@ -89,6 +74,12 @@ export class ChatSettingsBase extends Block {
 
 		this.chatId = chatId;
 		this.avatarForm = avatarForm;
+	}
+
+	deleteChat() {
+		if (this.chatId) {
+			chatController.deleteChat(this.chatId);
+		}
 	}
 
 	protected override componentDidUpdate(

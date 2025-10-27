@@ -20,11 +20,13 @@ type Options = {
 		| undefined;
 };
 
+export const BASE_URL = 'https://ya-praktikum.tech/api/v2';
+
 export class HTTPTransport {
 	urlBase: string;
 
-	constructor(urlBase: string | undefined) {
-		this.urlBase = urlBase || '';
+	constructor(endpoint: string | undefined) {
+		this.urlBase = endpoint ? `${BASE_URL}${endpoint}` : '';
 	}
 
 	get = (url: string, options: Options = {}) => {

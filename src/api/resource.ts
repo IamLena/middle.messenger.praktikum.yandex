@@ -1,7 +1,8 @@
-import { HTTPTransport } from './HTTPTransport';
+import { HTTPTransport, BASE_URL } from './HTTPTransport';
 import { type Resource, type ResourceUploadData } from '../types.ts';
+import { parseResponse } from './error.ts';
 
-const RESOURCE_BASE_URL = 'https://ya-praktikum.tech/api/v2/resources';
+const RESOURCE_BASE_URL = `${BASE_URL}/resources`;
 const http = new HTTPTransport(RESOURCE_BASE_URL);
 
 export const ResourceApi = {
@@ -15,6 +16,6 @@ export const ResourceApi = {
 			.post(`/`, {
 				data,
 			})
-			.then((response) => JSON.parse(response));
+			.then((response) => parseResponse<Resource>(response));
 	},
 };

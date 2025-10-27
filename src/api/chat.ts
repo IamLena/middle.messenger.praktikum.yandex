@@ -1,4 +1,5 @@
 import { HTTPTransport } from './HTTPTransport';
+import { parseResponse } from './error.ts';
 import {
 	type GetChatsOptions,
 	type RawChat,
@@ -10,13 +11,13 @@ import {
 	type AvatarData,
 } from '../types.ts';
 
-const http = new HTTPTransport('https://ya-praktikum.tech/api/v2/chats');
+const http = new HTTPTransport('/chats');
 
 export const ChatApi = {
 	get: (options: GetChatsOptions): Promise<RawChat[]> => {
 		return http
 			.get('/', { data: options })
-			.then((response) => JSON.parse(response));
+			.then((response) => parseResponse<RawChat[]>(response));
 	},
 
 	create: (title: string): Promise<ChatId> => {
@@ -25,7 +26,7 @@ export const ChatApi = {
 				data: JSON.stringify({ title }),
 				headers: { 'content-type': 'application/json' },
 			})
-			.then((response) => JSON.parse(response));
+			.then((response) => parseResponse<ChatId>(response));
 	},
 
 	delete: (chatId: ChatId): Promise<RawDeleteResult> => {
@@ -34,7 +35,7 @@ export const ChatApi = {
 				data: JSON.stringify({ chatId }),
 				headers: { 'content-type': 'application/json' },
 			})
-			.then((response) => JSON.parse(response));
+			.then((response) => parseResponse<RawDeleteResult>(response));
 	},
 
 	getUsers: ({
@@ -43,7 +44,7 @@ export const ChatApi = {
 	}: GetChatUsersOptions): Promise<RawChatUser[]> => {
 		return http
 			.get(`/${id}/users`, { data: options })
-			.then((response) => JSON.parse(response));
+			.then((response) => parseResponse<RawChatUser[]>(response));
 	},
 
 	addUser: (data: ChatUsersData) => {
@@ -60,10 +61,10 @@ export const ChatApi = {
 		});
 	},
 
-	getToken: (id: number) => {
+	getToken: (id: number): Promise<{ token: string }> => {
 		return http
 			.post(`/token/${id}`)
-			.then((response) => JSON.parse(response));
+			.then((response) => parseResponse<{ token: string }>(response));
 	},
 
 	changeAvatar: (chatId: ChatId, data: AvatarData) => {

@@ -47,8 +47,9 @@ export class RightPane extends Block {
 	}
 
 	sendMessage(text: string) {
-		if (this.socket) {
-			this.socket.sendMessage(text);
+		const trimmedText = text?.trim();
+		if (trimmedText && this.socket) {
+			this.socket.sendMessage(trimmedText);
 		}
 	}
 
