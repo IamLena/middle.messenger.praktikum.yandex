@@ -29,5 +29,14 @@ export function throwError(result: XMLHttpRequest) {
 	if (status < 400) {
 		return result.response;
 	}
-	throw new ErrorWithCode(JSON.parse(result.response).reason, status);
+	const { reason } = parseResponse<{ reason: string }>(result.response);
+	throw new ErrorWithCode(reason, status);
 }
+
+export const parseResponse = <T>(response: string): T => {
+	try {
+		return JSON.parse(response) as T;
+	} catch (error) {
+		throw new ErrorWithCode(`json parse error ${error}`, 500);
+	}
+};

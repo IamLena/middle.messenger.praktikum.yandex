@@ -1,5 +1,5 @@
 import { ChatApi } from '../api/chat.ts';
-import { ErrorWithCode, handleError } from '../api/error.ts';
+import { ErrorWithCode, handleError, parseResponse } from '../api/error.ts';
 import { store } from '../store/Store.ts';
 import {
 	type GetChatsOptions,
@@ -170,7 +170,7 @@ export const chatController = {
 
 	async changeAvatar(chatId: ChatId, avatarData: AvatarData) {
 		await ChatApi.changeAvatar(chatId, avatarData).then((data) => {
-			store.set(`chats.${chatId}`, JSON.parse(data));
+			store.set(`chats.${chatId}`, parseResponse<RawChat>(data));
 		});
 	},
 };

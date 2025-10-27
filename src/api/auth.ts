@@ -1,7 +1,8 @@
 import { HTTPTransport } from './HTTPTransport';
 import { type LoginData, type RegisterData, type User } from '../types.ts';
+import { parseResponse } from '../api/error.ts';
 
-const http = new HTTPTransport('https://ya-praktikum.tech/api/v2/auth');
+const http = new HTTPTransport('/auth');
 
 export const AuthApi = {
 	signup: (data: RegisterData) => {
@@ -19,7 +20,7 @@ export const AuthApi = {
 	},
 
 	getCurrentUser: (): Promise<User> => {
-		return http.get('/user').then((response) => JSON.parse(response));
+		return http.get('/user').then((response) => parseResponse(response));
 	},
 
 	logout: () => {

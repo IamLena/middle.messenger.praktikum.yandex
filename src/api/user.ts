@@ -5,8 +5,9 @@ import {
 	type User,
 	type AvatarData,
 } from '../types.ts';
+import { parseResponse } from './error.ts';
 
-const http = new HTTPTransport('https://ya-praktikum.tech/api/v2/user');
+const http = new HTTPTransport('/user');
 
 export const UserApi = {
 	changeProfileInfo: (data: ProfileInfo): Promise<User> => {
@@ -15,7 +16,7 @@ export const UserApi = {
 				data: JSON.stringify(data),
 				headers: { 'content-type': 'application/json' },
 			})
-			.then((response) => JSON.parse(response));
+			.then((response) => parseResponse<User>(response));
 	},
 
 	changeAvatar: (data: AvatarData): Promise<User> => {
@@ -23,7 +24,7 @@ export const UserApi = {
 			.put('/profile/avatar', {
 				data,
 			})
-			.then((response) => JSON.parse(response));
+			.then((response) => parseResponse<User>(response));
 	},
 
 	changePassword: (data: PasswordData): Promise<void> => {
@@ -39,6 +40,6 @@ export const UserApi = {
 				data: JSON.stringify({ login }),
 				headers: { 'content-type': 'application/json' },
 			})
-			.then((response) => JSON.parse(response));
+			.then((response) => parseResponse<User[]>(response));
 	},
 };
