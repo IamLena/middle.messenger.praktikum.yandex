@@ -52,7 +52,7 @@ export class LeftPaneHeader extends Block {
 	private search(data: Record<string, string>) {
 		const title = (data.title ?? '').trim();
 		chatController.setCurrentUserChatsToStore({
-			title: title || undefined,
+			title,
 		});
 	}
 
