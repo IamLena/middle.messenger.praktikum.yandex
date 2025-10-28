@@ -1,9 +1,25 @@
-import { CurrentPage } from './components';
+import {
+	LoginPage,
+	RegisterPage,
+	ProfilePage,
+	ChatsPage,
+	notFoundPage,
+	fatalPage,
+} from './pages';
+import { Router } from './framework/Router';
+
+// to consts
+const routingConfig = {
+	'/': LoginPage,
+	'/sign-up': RegisterPage,
+	'/settings': ProfilePage,
+	'/messenger': ChatsPage,
+	'/404': notFoundPage,
+	'/fatal': fatalPage,
+};
 
 document.addEventListener('DOMContentLoaded', () => {
-	const page = new CurrentPage();
-	const rootElement = document.getElementById('app');
-	if (rootElement) {
-		rootElement.replaceWith(page.getContent());
-	}
+	const router = new Router('#app');
+	router.initPages(routingConfig);
+	router.start();
 });

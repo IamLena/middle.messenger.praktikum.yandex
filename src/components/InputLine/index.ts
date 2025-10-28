@@ -15,6 +15,7 @@ export type Props = {
 	validate: ValidationFunction;
 	autocomplete?: string;
 	setValidationError?: setValidationErrorType;
+	disabled?: boolean;
 };
 
 export class InputLine extends Block {
@@ -29,20 +30,31 @@ export class InputLine extends Block {
 	}
 
 	validate() {
-		const result = (this.props.validate as ValidationFunction)(
-			this.getValue()
-		);
-		const { value, isValid, error } = result;
-		this.props.value = value;
-		this.props.isInvalid = !isValid;
-		if (this.props.setValidationError) {
-			(this.props.setValidationError as setValidationErrorType)(error);
+		if (this.props.validate) {
+			const result = (this.props.validate as ValidationFunction)(
+				this.getValue()
+			);
+			const { value, isValid, error } = result;
+			this.props.value = value;
+			this.props.isInvalid = !isValid;
+			if (this.props.setValidationError) {
+				(this.props.setValidationError as setValidationErrorType)(
+					error
+				);
+			}
+			return result;
 		}
-		return result;
 	}
 
 	getValue() {
 		return (this.getContent() as HTMLInputElement).value;
+	}
+
+	setValue(value: string) {
+		this.updateProps({
+			value,
+			isInvalid: false,
+		});
 	}
 
 	override render() {
@@ -52,8 +64,9 @@ export class InputLine extends Block {
 				type="{{type}}"
 				id="{{id}}"
 				name="{{name}}"
-				value="{{value}}"
+				{{#if value}}value="{{value}}"{{/if}}
 				${this.props.autocomplete ? 'autocomplete="{{autocomplete}}"' : ''}
+				{{#if disabled}}disabled{{/if}}
 			>
 		`;
 	}

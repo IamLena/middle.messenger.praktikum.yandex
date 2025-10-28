@@ -39,6 +39,11 @@ export class Input extends Block {
 		return this.props.name as string;
 	}
 
+	setValue(value: string) {
+		this.input.setValue(value);
+		this.setValidationError(undefined);
+	}
+
 	override render() {
 		return `
 		<div>

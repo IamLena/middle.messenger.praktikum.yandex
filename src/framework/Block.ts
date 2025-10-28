@@ -2,11 +2,12 @@ import { NO_ACCESS, NO_ELEMENT } from '../errorConsts';
 import { EventBus, type EventsToPass, type Handler } from './EventBus';
 import { v4 as makeUUID } from 'uuid';
 import Handlebars from 'handlebars';
+import { isEqual } from '../tools/isEqual';
 
 type AnyProps = Record<string, unknown>;
 type ChildenAsProps = Record<string, Block>;
 type ListsAsProps = Record<string, unknown[]>;
-type BlockProps = AnyProps;
+export type BlockProps = AnyProps;
 export class Block {
 	static EVENTS = {
 		INIT: 'init',
@@ -59,8 +60,8 @@ export class Block {
 	 * запускаем рендеринг
 	 * @param props - объект параметров любого типа
 	 */
-	public init(propsToPars: BlockProps = {}) {
-		const { children, lists, props } = this._parseProps(propsToPars);
+	public init(propsToParse: BlockProps = {}) {
+		const { children, lists, props } = this._parseProps(propsToParse);
 		this.children = children;
 		this.lists = this._makePropsProxy({ ...lists }) as Record<
 			string,
@@ -69,6 +70,7 @@ export class Block {
 		this.props = this._makePropsProxy({ ...props });
 
 		this.events = (this.props.events || {}) as EventsToPass;
+		// this.events = this._makeEventsProxy({ ...events }) as EventsToPass;
 		this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
 	}
 
@@ -96,6 +98,16 @@ export class Block {
 		return { children, lists, props };
 	}
 
+	public updateProps(props: AnyProps) {
+		if (!isEqual(this.props, props)) {
+			Object.assign(this.props, props);
+		}
+	}
+
+	public updateLists(lists: ListsAsProps) {
+		Object.assign(this.lists, lists);
+	}
+
 	/**
 	 * оборачивает объект в прокси
 	 * тригерит componentDidUpdate при сете пропсов и запрещает удаление
@@ -121,6 +133,26 @@ export class Block {
 		});
 	}
 
+	// private _makeEventsProxy(props: AnyProps) {
+	// 	const removeEvents = this._removeEvents;
+	// 	const addEvents = this._addEvents;
+	// 	return new Proxy(props, {
+	// 		get(target: Record<string, unknown>, prop: string) {
+	// 			const value = target[prop];
+	// 			return value;
+	// 		},
+	// 		set(target: Record<string, unknown>, prop: string, value: unknown) {
+	// 			removeEvents();
+	// 			target[prop] = value;
+	// 			addEvents();
+	// 			return true;
+	// 		},
+	// 		deleteProperty() {
+	// 			throw new Error(NO_ACCESS('for deleting properties of Block'));
+	// 		},
+	// 	});
+	// }
+
 	/**
 	 * тригерится событием изменения параметров
 	 * вызывает componentDidUpdate (возможно переопределенный сверху)
@@ -143,10 +175,11 @@ export class Block {
 	 * @returns признак нужен ли ререндер
 	 */
 	protected componentDidUpdate(
-		oldProps: AnyProps,
-		newProps: AnyProps
+		_oldProps: AnyProps,
+		_newProps: AnyProps
 	): boolean {
-		console.log('componentDidUpdate', oldProps, newProps);
+		void _oldProps;
+		void _newProps;
 		return true;
 	}
 
@@ -226,7 +259,7 @@ export class Block {
 	}
 
 	private _addEvents() {
-		if (!this._element) {
+		if (this.events && !this._element) {
 			throw new Error(NO_ELEMENT);
 		}
 		Object.keys(this.events).forEach((eventName) => {
@@ -249,18 +282,6 @@ export class Block {
 		}
 		return this._element;
 	}
-
-	public show(): void {
-		const content = this.getContent();
-		if (content) {
-			content.style.display = 'block';
-		}
-	}
-
-	public hide(): void {
-		const content = this.getContent();
-		if (content) {
-			content.style.display = 'none';
-		}
-	}
 }
+
+export type BlockClass = typeof Block;

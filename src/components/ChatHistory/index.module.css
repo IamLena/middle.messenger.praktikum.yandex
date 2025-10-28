@@ -1,10 +1,18 @@
 @import url("../../variables.css");
 
 .container {
-	height: calc(100% - var(--compose-height) - 20px);
+	flex: 1;
+	min-height: 0;
+	overflow-y: auto;
 	background-color: aliceblue;
 	display: flex;
-	flex-direction: column;
+	flex-direction: column-reverse;
 	gap: 20px;
-	padding: 10px;
+	padding: 16px;
+	box-sizing: border-box;
+}
+
+.stub {
+	align-items: center;
+	justify-content: center;
 }
