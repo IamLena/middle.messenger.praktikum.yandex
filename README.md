@@ -9,16 +9,25 @@ npm run dev
 
 По умолчанию Vite поднимает dev-сервер на порту `3000`. Для production-сборки используйте `npm run build`, для локального предпросмотра — `npm run start`.
 
-## Основные зависимости
+## Основные зависимости и инструменты
 
--   TypeScript (^5.9.2) — проверка типизации: `npm run check:ts`
--   Vite (^7.1.3) — сборка и dev-сервер (`npm run dev`, `npm run start`)
--   PostCSS (^8.5.6)
--   Handlebars (^4.7.8) — клиентская компиляция шаблонов
--   ESLint (^9.35.0) — `npm run lint`, `npm run lint:fix`
--   Stylelint (^16.24.0) — `npm run lint:css`, `npm run lint:css:fix`
+-   TypeScript (5.9.2) — проверка типизации: `npm run check:ts`
+-   Vite (7.1.12) — сборка и dev-сервер (`npm run dev`, `npm run start`)
+-   PostCSS (8.5.6)
+-   Handlebars (4.7.8) — клиентская компиляция шаблонов
+-   ESLint (9.35.0) — `npm run lint`, `npm run lint:fix`
+-   Stylelint (16.24.0) — `npm run lint:css`, `npm run lint:css:fix`
+-   Jest (29.7.0) с ts-jest (29.1.1) и jsdom (`jest.config.mjs`)
+-   Husky (9.1.7) — git-hooks
 
 Автодеплой настроен на Netlify из ветки `deploy`: https://lenaschat.netlify.app/
+
+## Тестирование
+
+-   Тесты написаны на Jest.
+-   Запуск всех тестов: `npm test` (метчится по `*.test.*`).
+-   Скрипт использует ключ Node `--experimental-vm-modules` для поддержки ES Module; предупреждение в консоли является ожидаемым.
+-   Hook Husky (`.husky/pre-commit`) автоматически запускает проверки линтера и типизации перед коммитом.
 
 ## Валидация форм
 

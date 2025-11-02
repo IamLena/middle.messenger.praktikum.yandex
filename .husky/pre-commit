@@ -1,0 +1,1 @@
+npm-run-all lint:fix lint:css:fix check:ts
