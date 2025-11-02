@@ -8,11 +8,9 @@
 
 		"moduleResolution": "bundler",
 		"allowImportingTsExtensions": true,
-		"allowArbitraryExtensions": true,
 		"verbatimModuleSyntax": true,
 		"moduleDetection": "force",
 		"noEmit": true,
-		"esModuleInterop": true,
 
 		"strict": true,
 		"noUnusedLocals": true,
